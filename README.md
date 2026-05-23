@@ -1,5 +1,9 @@
 # QA Automation Portfolio – Viktória Tóth
 
+[![CI](https://github.com/tothviki/qa-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tothviki/qa-portfolio/actions/workflows/ci.yml)
+![Automated Tests](https://img.shields.io/badge/Automated%20Tests-Passing-brightgreen?style=flat&logo=checkmarx&logoColor=white)
+![Playwright](https://img.shields.io/badge/Framework-Playwright-2EAD33?style=flat&logo=playwright&logoColor=white)
+
 Senior QA Automation / SDET portfolio demonstrating API, web, mobile and
 performance testing skills with TypeScript, Java, Playwright, REST Assured,
 Postman/Newman, Selenium WebDriver, Appium and JMeter.
