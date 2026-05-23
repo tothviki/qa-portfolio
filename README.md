@@ -1,0 +1,211 @@
+# QA Automation Portfolio – Viktória Tóth
+
+Senior QA Automation / SDET portfolio demonstrating API, web, mobile and
+performance testing skills with TypeScript, Java, Playwright, REST Assured,
+Postman/Newman, Selenium WebDriver, Appium and JMeter.
+
+This repository contains small, focused and documented testing projects that
+show practical QA automation skills, maintainable test structure, regression
+thinking and multi-tool testing experience.
+
+## Portfolio Highlights
+
+- Flagship module: Playwright + TypeScript API, UI and E2E automation suite
+- API testing with Playwright API, REST Assured and Postman/Newman
+- Web UI automation examples with Selenium WebDriver
+- Mobile automation examples with Appium
+- Performance testing examples with JMeter
+- Repository-level Gradle tasks for repeatable portfolio validation
+- Module-level commands for focused API, UI, mobile and performance test runs
+
+## Tech Stack
+
+- **Programming:** TypeScript, Java, Python
+- **Test Automation:** Playwright, REST Assured, Postman/Newman, Selenium WebDriver, Appium
+- **Performance Testing:** JMeter
+- **Build & Execution:** Gradle, npm
+- **Quality & Tooling:** GitHub Actions, TestNG, PyTest, ESLint, Prettier
+- **Testing Areas:** API, Web UI, Mobile, E2E, Performance, Regression
+
+## Projects
+
+### Flagship: Playwright API, UI and E2E Automation
+
+**Playwright + TypeScript**
+
+Modern test automation suite for the public Automation in Testing / Shady
+Meadows B&B demo application. Covers API, UI and E2E scenarios across booking,
+room discovery, validation, health, contact form and cross-browser workflows.
+
+Demonstrates maintainable Playwright test architecture with API helpers, page
+objects, reusable fixtures, structured test data, cleanup logic, schema
+validation and reporting.
+
+→ [playwright-tests](playwright-tests)
+
+### API Testing
+
+#### REST Assured API Tests
+
+**REST Assured + Java**
+
+Java-based API test suite demonstrating request and response validation,
+reusable test structure and regression-oriented API checks.
+
+→ [rest-assured-api-tests](rest-assured-api-tests)
+
+#### Postman API Tests
+
+**Postman + Newman**
+
+Postman collection with Newman command-line execution for API checks that are
+easy to review, run locally and integrate into automated workflows.
+
+→ [postman-api-tests](postman-api-tests)
+
+### Web, Mobile and Performance
+
+#### Selenium Web Tests
+
+**Selenium WebDriver + Java**
+
+Web UI automation examples demonstrating browser-based testing structure and
+Selenium WebDriver usage.
+
+→ [selenium-web-tests](selenium-web-tests)
+
+#### Appium Mobile Tests
+
+**Appium + Java**
+
+Mobile automation examples demonstrating Appium-based test structure for mobile
+QA scenarios.
+
+→ [appium-mobile-tests](appium-mobile-tests)
+
+#### JMeter Performance Tests
+
+**JMeter + Gradle**
+
+Performance testing examples integrated with Gradle for repeatable execution.
+
+→ [jmeter-performance-tests](jmeter-performance-tests)
+
+## Repository Structure
+```
+    qa-portfolio/
+    ├── appium-mobile-tests/
+    ├── jmeter-performance-tests/
+    ├── playwright-tests/
+    ├── postman-api-tests/
+    ├── rest-assured-api-tests/
+    ├── selenium-web-tests/
+    ├── build.gradle
+    ├── settings.gradle
+    └── README.md
+```
+## Running Tests
+
+Run commands from the repository root.
+
+### Run the default portfolio validation
+
+Runs the reliable portfolio checks, including Java modules, REST Assured API
+tests, Playwright active suite checks and Postman/Newman API tests.
+
+```bash
+./gradlew portfolioTest
+```
+
+The standard Gradle lifecycle is wired to the same portfolio validation:
+
+```bash
+./gradlew clean build
+```
+
+Note: the Playwright active suite may include UI/browser tests, which require
+Playwright browser binaries and can increase build runtime. For faster API-only
+or focused runs, use the module-level tasks below.
+
+### Run all wired suites
+
+```bash
+./gradlew portfolioFullTest
+```
+
+### Run API tests only
+
+Runs REST Assured, Playwright API and Postman/Newman checks:
+
+```bash
+./gradlew apiTest
+```
+
+### Run Java/Gradle modules only
+
+```bash
+./gradlew javaTest
+```
+
+### Run one module
+
+Use the Gradle project path and task name:
+
+```bash
+./gradlew :rest-assured-api-tests:test
+./gradlew :playwright-tests:playwrightApiTest
+./gradlew :playwright-tests:playwrightTypeCheck
+./gradlew :postman-api-tests:postmanTest
+./gradlew :selenium-web-tests:test
+./gradlew :appium-mobile-tests:test
+./gradlew :jmeter-performance-tests:test
+```
+
+### Run a subset of modules
+
+Pass multiple tasks in one command:
+
+```bash
+./gradlew :rest-assured-api-tests:test :postman-api-tests:postmanTest
+./gradlew :playwright-tests:playwrightApiTest :postman-api-tests:postmanTest
+./gradlew :selenium-web-tests:test :appium-mobile-tests:test
+```
+
+### Run REST Assured groups
+
+```bash
+./gradlew :rest-assured-api-tests:runSmokeTests
+./gradlew :rest-assured-api-tests:runRegressionTests
+```
+
+### Clean generated outputs
+
+```bash
+./gradlew clean
+```
+
+## What This Portfolio Demonstrates
+
+- Current hands-on QA automation practice with modern Playwright + TypeScript
+- API testing across multiple approaches: Playwright API, REST Assured and Postman/Newman
+- Maintainable test design with fixtures, helpers, page objects and reusable test data
+- Regression-oriented test coverage across API, web, mobile and performance areas
+- Practical experience with Gradle-based orchestration across multiple QA modules
+- Ability to document, structure and maintain test automation projects for review
+
+## Recommended Review Path
+
+If you are reviewing this portfolio quickly, start here:
+
+1. [playwright-tests](playwright-tests) – strongest and most complete module
+2. [rest-assured-api-tests](rest-assured-api-tests) – Java API automation
+3. [postman-api-tests](postman-api-tests) – Postman/Newman API checks
+
+The remaining modules demonstrate additional tool coverage across Selenium,
+Appium and JMeter.
+
+## Contact
+
+- **Location:** Prague, Czech Republic
+- **Email:** viktory.toth@gmail.com
+- **LinkedIn:** [linkedin.com/in/tothviki](https://www.linkedin.com/in/tothviki/)

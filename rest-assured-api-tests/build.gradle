@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    // RestAssured
+    testImplementation "io.rest-assured:rest-assured:$restAssuredVersion"
+    testImplementation "io.rest-assured:json-path:$restAssuredVersion"
+    testImplementation "io.rest-assured:json-schema-validator:$restAssuredVersion"
+
+    // lombok
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    // TestNG
+    testImplementation "org.testng:testng:$testNgVersion"
+
+    // Jackson (POJO mapping)
+    testImplementation "tools.jackson.core:jackson-databind:$jacksonVersion"
+
+    // Logging
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
+
+    // AssertJ
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+}
+
+test {
+    useTestNG() {
+     //   parallel = 'methods'
+     //   threadCount = 4
+    }
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+
+    // HTML report a build/reports/tests/test/index.html
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+}
+
+tasks.register('runSmokeTests', Test) {
+    useTestNG() {
+        includeGroups 'smoke'
+    }
+}
+
+tasks.register('runRegressionTests', Test) {
+    useTestNG() {
+        includeGroups 'regression'
+    }
+}

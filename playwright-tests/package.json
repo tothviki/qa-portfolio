@@ -1,0 +1,38 @@
+{
+  "name": "playwright-tests",
+  "version": "1.0.0",
+  "description": "API, UI, and e2e portfolio tests for Automation in Testing using Playwright",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:api": "npx playwright test --project=api",
+    "test:web": "npx playwright test --project=ui-chrome",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:e2e": "npx playwright test --project=e2e",
+    "test:e2e:all": "npx playwright test --project=e2e --project=e2e-firefox --project=e2e-webkit",
+    "test:ui:chrome": "npx playwright test --project=ui-chrome",
+    "test:ui:firefox": "npx playwright test --project=ui-firefox",
+    "test:ui:webkit": "npx playwright test --project=ui-webkit",
+    "test:ui:cross-browser": "npx playwright test --project=ui-chrome --project=ui-firefox --project=ui-webkit",
+    "test:chrome": "npm run test:ui:chrome",
+    "test:firefox": "npm run test:ui:firefox",
+    "test:webkit": "npm run test:ui:webkit",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "check": "npm run lint && npm run typecheck && npm run format:check",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\"",
+    "typecheck": "tsc --noEmit",
+    "report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "eslint-plugin-playwright": "^2.10.4",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.4",
+    "zod": "^4.4.3"
+  }
+}

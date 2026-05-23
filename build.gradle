@@ -1,0 +1,159 @@
+plugins {
+    id 'base'
+}
+
+def npmExecutable = providers.gradleProperty('npmExecutable').orElse('npm')
+def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
+
+tasks.register('npmInstall', Exec) {
+    group = 'build'
+    description = 'Installs Playwright project npm dependencies.'
+
+    commandLine npmExecutable.get(), 'install'
+}
+
+tasks.register('playwrightTest', Exec) {
+    group = 'verification'
+    description = 'Runs the active Playwright test suite.'
+
+    commandLine npmExecutable.get(), 'run', 'test'
+}
+
+tasks.register('playwrightApiTest', Exec) {
+    group = 'verification'
+    description = 'Runs Playwright API tests.'
+
+    commandLine npmExecutable.get(), 'run', 'test:api'
+}
+
+tasks.register('playwrightWebTest', Exec) {
+    group = 'verification'
+    description = 'Reports that Playwright web tests are quarantined.'
+
+    commandLine npmExecutable.get(), 'run', 'test:web'
+}
+
+tasks.register('playwrightUiTest', Exec) {
+    group = 'verification'
+    description = 'Runs Playwright UI / web tests (tagged with @ui).'
+
+    commandLine npmExecutable.get(), 'run', 'test:web'
+}
+
+tasks.register('playwrightSmokeTest', Exec) {
+    group = 'verification'
+    description = 'Runs Playwright smoke tests.'
+
+    commandLine npmExecutable.get(), 'run', 'test:smoke'
+}
+
+tasks.register('playwrightReport', Exec) {
+    group = 'verification'
+    description = 'Opens the Playwright HTML report.'
+
+    commandLine npxExecutable.get(), 'playwright', 'show-report'
+}
+
+tasks.register('playwrightTypeCheck', Exec) {
+    group = 'verification'
+    description = 'Runs TypeScript type checking for active Playwright code.'
+
+    commandLine npmExecutable.get(), 'run', 'typecheck'
+}
+
+tasks.named('clean') {
+    delete 'allure-results'
+    delete 'playwright-report'
+    delete 'test-reports'
+    delete 'test-results'
+    delete 'test-results.json'
+}
+
+subprojects {
+    group = 'com.portfolio'
+    version = '1.0.0'
+}
+
+configure(subprojects.findAll { it.name.endsWith('-tests') }) {
+    pluginManager.withPlugin('java') {
+        repositories {
+            mavenCentral()
+        }
+    }
+}
+
+configure([
+        project(':rest-assured-api-tests'),
+        project(':selenium-web-tests'),
+        project(':appium-mobile-tests'),
+        project(':jmeter-performance-tests')
+]) {
+    pluginManager.withPlugin('java') {
+        dependencies {
+            testImplementation platform("org.junit:junit-bom:$junitVersion")
+            testImplementation 'org.junit.jupiter:junit-jupiter'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        }
+
+        tasks.named('test') {
+            useJUnitPlatform()
+        }
+    }
+}
+
+tasks.register('javaTest') {
+    group = 'verification'
+    description = 'Runs tests for all Java-based Gradle modules.'
+
+    dependsOn ':rest-assured-api-tests:test'
+    dependsOn ':selenium-web-tests:test'
+    dependsOn ':appium-mobile-tests:test'
+    dependsOn ':jmeter-performance-tests:test'
+}
+
+tasks.register('apiTest') {
+    group = 'verification'
+    description = 'Runs API test suites across REST Assured, Playwright, and Postman.'
+
+    dependsOn ':rest-assured-api-tests:test'
+    dependsOn ':playwright-tests:playwrightApiTest'
+    dependsOn ':postman-api-tests:postmanTest'
+}
+
+tasks.register('portfolioTest') {
+    group = 'verification'
+    description = 'Runs the reliable portfolio test suites wired into Gradle.'
+
+    dependsOn 'javaTest'
+    dependsOn ':playwright-tests:playwrightTypeCheck'
+    // Run the active Playwright suite by default (includes API and UI projects)
+    dependsOn ':playwright-tests:playwrightTest'
+    dependsOn ':postman-api-tests:postmanTest'
+}
+
+tasks.register('portfolioFullTest') {
+    group = 'verification'
+    description = 'Runs all wired suites, including the full Playwright web suite.'
+
+    dependsOn 'javaTest'
+    dependsOn ':playwright-tests:playwrightTypeCheck'
+    dependsOn ':playwright-tests:playwrightTest'
+    dependsOn ':postman-api-tests:postmanTest'
+}
+
+tasks.named('check') {
+    dependsOn 'portfolioTest'
+}
+
+// Ensure default `build` runs all modules
+tasks.named('build') {
+    // The root `build` task should depend on each subproject's `build` task
+    dependsOn subprojects.collect { it.path + ':build' }
+}
+
+tasks.register('portfolioClean') {
+    group = 'build'
+    description = 'Cleans generated outputs across all portfolio modules.'
+
+    dependsOn subprojects.collect { "${it.path}:clean" }
+}

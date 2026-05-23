@@ -1,0 +1,157 @@
+# ====================
+# IDE / Editor files
+# ====================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.iml
+.project
+.classpath
+.settings/
+
+# ====================
+# OS generated files
+# ====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ====================
+# Java + Gradle
+# ====================
+.gradle/
+build/
+test-results/
+**/.gradle/
+**/build/
+**/bin/
+**/out/
+**/.gradletasknamecache
+**/gradle-app.setting
+
+# Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
+**/gradle/wrapper/gradle-wrapper.properties.bak
+
+# Java build outputs
+*.class
+*.jar
+!**/gradle/wrapper/gradle-wrapper.jar
+*.war
+*.ear
+target/
+
+# Logs
+*.log
+**/logs/
+
+# ====================
+# TypeScript / Playwright
+# ====================
+**/node_modules/
+**/dist/
+**/test-results/
+**/test-reports/
+**/playwright-report/
+**/.cache/
+**/allure-results/
+**/allure-report/
+
+# TypeScript build outputs
+*.js
+*.d.ts
+*.js.map
+
+# ====================
+# Environment files (SENSITIVE!)
+# ====================
+.env
+.env.local
+.env.*.local
+*.env
+*.env.local
+
+# ====================
+# Secrets / Credentials (CRITICAL!)
+# ====================
+# Never commit these!
+secrets/
+credentials/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.secret
+secrets.json
+credentials.json
+
+# Test data with real credentials
+*test-data*.json
+*credentials*.json
+
+# ====================
+# Postman
+# ====================
+**/newman/
+*.report.json
+*.report.html
+
+# Postman backups
+*.postman_backup.json
+
+# ====================
+# Logs & temp files
+# ====================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ====================
+# Reports (generated)
+# ====================
+reports/
+test-reports/
+html-report/
+allure-results/
+allure-report/
+coverage/
+.nyc_output/
+
+# ====================
+# Package manager lock files (optional - team preference)
+# ====================
+# Uncomment if you want to ignore lock files
+# package-lock.json
+# yarn.lock
+
+# ====================
+# Docker
+# ====================
+*.dockerignore
+docker-compose.override.yml
+.docker/
+docker/
+
+# ====================
+# Local configuration
+# ====================
+config.local.*
+local.properties
+*.local.*

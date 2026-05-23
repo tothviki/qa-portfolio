@@ -1,0 +1,61 @@
+plugins {
+    id 'base'
+}
+
+def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
+def postmanEnvironment = providers.gradleProperty('postmanEnvironment').orElse('production')
+def reportDir = layout.buildDirectory.dir('reports/postman')
+
+tasks.register('postmanTest', Exec) {
+    group = 'verification'
+    description = 'Runs the Postman collection with Newman.'
+
+    dependsOn 'cleanPostmanReports'
+
+    doFirst {
+        reportDir.get().asFile.mkdirs()
+    }
+
+    commandLine npxExecutable.get(),
+            '--yes',
+            'newman',
+            'run',
+            'collections/Restful-Booker-API-Tests.json',
+            '--environment',
+            "environments/${postmanEnvironment.get()}.postman_environment.json",
+            '--reporters',
+            'cli,json',
+            '--reporter-json-export',
+            reportDir.map { it.file('newman-report.json').asFile.path }.get()
+}
+
+tasks.register('postmanLocalTest', Exec) {
+    group = 'verification'
+    description = 'Runs the Postman collection against the local environment.'
+
+    dependsOn 'cleanPostmanReports'
+
+    doFirst {
+        reportDir.get().asFile.mkdirs()
+    }
+
+    commandLine npxExecutable.get(),
+            '--yes',
+            'newman',
+            'run',
+            'collections/Restful-Booker-API-Tests.json',
+            '--environment',
+            'environments/local.postman_environment.json',
+            '--reporters',
+            'cli,json',
+            '--reporter-json-export',
+            reportDir.map { it.file('newman-local-report.json').asFile.path }.get()
+}
+
+tasks.register('cleanPostmanReports', Delete) {
+    delete reportDir
+}
+
+tasks.named('clean') {
+    dependsOn 'cleanPostmanReports'
+}

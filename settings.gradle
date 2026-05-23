@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'qa-portfolio'
+
+include 'rest-assured-api-tests'
+include 'selenium-web-tests'
+include 'appium-mobile-tests'
+include 'jmeter-performance-tests'
+include 'playwright-tests'
+include 'postman-api-tests'
