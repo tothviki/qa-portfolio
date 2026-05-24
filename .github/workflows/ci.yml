@@ -211,9 +211,8 @@ jobs:
           if-no-files-found: ignore
 
   postman-api-tests:
-    name: Postman API tests (non-blocking)
+    name: Postman API tests
     runs-on: ubuntu-latest
-    continue-on-error: true
     timeout-minutes: 10
     permissions:
       contents: read
