@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   java-tests:
-    name: Java tests
+    name: Java and REST Assured tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -43,15 +43,17 @@ jobs:
         run: ./gradlew javaTest
 
       - name: Upload Gradle test reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gradle-test-reports
-          path: '**/build/reports/tests/'
+          name: rest-assured-test-reports
+          path: |
+            rest-assured-api-tests/build/reports/tests/test/
+            rest-assured-api-tests/build/test-results/test/
           if-no-files-found: ignore
 
   playwright-tests:
-    name: Playwright API and Chromium UI
+    name: Playwright suite
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -89,7 +91,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright checks
-        run: ./gradlew :playwright-tests:playwrightTypeCheck :playwright-tests:playwrightApiTest :playwright-tests:playwrightUiTest
+        run: ./gradlew :playwright-tests:playwrightTypeCheck :playwright-tests:playwrightTest
 
       - name: Upload Playwright reports
         if: failure()
