@@ -4,8 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class ContactPage extends BasePage {
+    private static final String HEADING_XPATH = "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][normalize-space()=%s]";
     private static final By HEADING = By.xpath(
-            "//*[self::h1 or self::h2 or self::h3][normalize-space()='Send Us a Message']"
+            String.format(HEADING_XPATH, "'Send Us a Message'")
     );
     private static final By NAME_INPUT = By.cssSelector("#name");
     private static final By EMAIL_INPUT = By.cssSelector("#email");

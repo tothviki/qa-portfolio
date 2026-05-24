@@ -6,18 +6,19 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReservationPage extends BasePage {
+    private static final String HEADING_XPATH = "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][normalize-space()=%s]";
     private static final By ROOM_HEADING = By.xpath(
-            "//*[self::h1 or self::h2 or self::h3][normalize-space()='Single' or normalize-space()='Double' or normalize-space()='Suite']"
+            "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][normalize-space()='Single' or normalize-space()='Double' or normalize-space()='Suite']"
     );
     private static final By BOOK_THIS_ROOM_HEADING = By.xpath(
-            "//*[self::h1 or self::h2 or self::h3][normalize-space()='Book This Room']"
+            String.format(HEADING_XPATH, "'Book This Room'")
     );
     private static final By PRICE_SUMMARY_TEXT = By.xpath("//*[contains(normalize-space(.), 'Price Summary')]");
     private static final By RESERVE_NOW_BUTTON = By.xpath("//button[normalize-space()='Reserve Now']");
     private static final By CANCEL_BUTTON = By.xpath("//button[normalize-space()='Cancel']");
-    private static final By ROOM_DESCRIPTION = By.xpath("//*[self::h1 or self::h2 or self::h3][normalize-space()='Room Description']");
-    private static final By ROOM_FEATURES = By.xpath("//*[self::h1 or self::h2 or self::h3][normalize-space()='Room Features']");
-    private static final By ROOM_POLICIES = By.xpath("//*[self::h1 or self::h2 or self::h3][normalize-space()='Room Policies']");
+    private static final By ROOM_DESCRIPTION = By.xpath(String.format(HEADING_XPATH, "'Room Description'"));
+    private static final By ROOM_FEATURES = By.xpath(String.format(HEADING_XPATH, "'Room Features'"));
+    private static final By ROOM_POLICIES = By.xpath(String.format(HEADING_XPATH, "'Room Policies'"));
 
     public ReservationPage(WebDriver driver, String baseUrl) {
         super(driver, baseUrl);

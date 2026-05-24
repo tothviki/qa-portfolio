@@ -127,7 +127,7 @@ abstract class BasePage {
         log.error("Page title: {}", driver.getTitle());
 
         log.error("Headings:");
-        for (WebElement heading : driver.findElements(By.xpath("//*[self::h1 or self::h2 or self::h3]"))) {
+        for (WebElement heading : driver.findElements(By.xpath("//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]"))) {
             if (heading.isDisplayed()) {
                 log.error(" - [{}] {}", heading.getTagName(), heading.getText());
             }

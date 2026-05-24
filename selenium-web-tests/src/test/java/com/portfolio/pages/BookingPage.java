@@ -2,7 +2,6 @@ package com.portfolio.pages;
 
 import com.portfolio.data.AutomationInTestingTestData;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -12,15 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookingPage extends BasePage {
+    private static final String HEADING_XPATH = "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][normalize-space()=%s]";
     private static final By AVAILABILITY_HEADING = By.xpath(
-            "//*[self::h1 or self::h2 or self::h3][normalize-space()='Check Availability & Book Your Stay']"
+            String.format(HEADING_XPATH, "'Check Availability & Book Your Stay'")
     );
     private static final By ROOM_LIST_HEADING = By.xpath(
-            "//*[self::h1 or self::h2 or self::h3][normalize-space()='Our Rooms']"
+            String.format(HEADING_XPATH, "'Our Rooms'")
     );
     private static final By BOOKING_SECTION = By.id("booking");
     private static final By CHECK_AVAILABILITY_BUTTON = By.xpath("//button[normalize-space()='Check Availability']");
-    private static final By BOOK_NOW_LINKS = By.cssSelector("#rooms a[href^='/reservation/']");
+    private static final By BOOK_NOW_LINKS = By.cssSelector("#rooms a[href*='/reservation/']");
 
     public BookingPage(WebDriver driver, String baseUrl) {
         super(driver, baseUrl);
@@ -55,20 +55,9 @@ public class BookingPage extends BasePage {
 
     public void expectRoomSummaries() {
         visible(ROOM_LIST_HEADING);
-        String roomsText;
-        try {
-            roomsText = wait.until(unused -> {
-                String candidate = driver.findElement(By.id("rooms")).getText();
-                return candidate.contains("Single") && candidate.contains("Double")
-                        ? candidate
-                        : null;
-            });
-        } catch (TimeoutException exception) {
-            dumpPageState("Timeout waiting for rooms summary text");
-            throw exception;
-        }
-        assertTrue(roomsText.contains("Single"), "Rooms section should list the Single room");
-        assertTrue(roomsText.contains("Double"), "Rooms section should list the Double room");
+        visible(By.xpath(String.format(HEADING_XPATH, "'Single'")));
+        visible(By.xpath(String.format(HEADING_XPATH, "'Double'")));
+        visible(By.xpath(String.format(HEADING_XPATH, "'Suite'")));
     }
 
     public void openFirstRoomReservation() {
