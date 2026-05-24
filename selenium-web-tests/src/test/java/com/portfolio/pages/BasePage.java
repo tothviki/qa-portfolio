@@ -166,7 +166,7 @@ abstract class BasePage {
         );
     }
 
-    private String xpathLiteral(String value) {
+    protected String xpathLiteral(String value) {
         if (!value.contains("'")) {
             return "'" + value + "'";
         }

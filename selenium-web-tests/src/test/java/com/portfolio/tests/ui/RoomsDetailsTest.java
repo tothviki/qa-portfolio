@@ -10,7 +10,7 @@ public class RoomsDetailsTest extends AutomationInTestingUiTestBase {
     void shouldViewHotelRoomSummariesAndRoomDetails() {
         bookingPage.gotoRooms();
         bookingPage.expectRoomSummaries();
-        bookingPage.expectBookNowLinks();
+        bookingPage.expectBookNowLinksAtLeast(2);
         ReservationPage reservationPage = bookingPage.openFirstRoomReservationPage();
         reservationPage.expectRoomDetails();
         reservationPage.expectReservationPage();

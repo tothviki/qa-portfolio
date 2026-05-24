@@ -4,7 +4,7 @@ REST Assured API suite for the public Automation in Testing service.
 
 ## Coverage Snapshot
 
-- 22 TestNG tests
+- 20 TestNG tests
 - 6 coverage areas: authentication, booking create, booking read, booking update, booking delete, and public API checks
 - HTML report: `build/reports/tests/test/index.html`
 - XML results: `build/test-results/test/`

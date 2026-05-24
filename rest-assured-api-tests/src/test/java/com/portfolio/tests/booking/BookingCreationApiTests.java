@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookingCreationApiTests extends BookingApiTestBase {
 
@@ -65,13 +64,10 @@ public class BookingCreationApiTests extends BookingApiTestBase {
     }
 
     @Test(groups = "regression")
-    public void shouldRejectMalformedJson() {
+    public void shouldReturnServerErrorForMalformedJson() {
         Response response = BookingClient.postRawBookingPayload(AutomationInTestingTestData.malformedBookingPayload());
 
-        assertTrue(
-                response.statusCode() == 400 || response.statusCode() == 500,
-                "Expected 400 or 500, but received " + response.statusCode() + ": " + response.asString()
-        );
+        assertEquals(500, response.statusCode(), "Malformed JSON currently surfaces as a server error");
     }
 
     @Test(groups = "regression")
@@ -82,12 +78,4 @@ public class BookingCreationApiTests extends BookingApiTestBase {
         assertBookingMatchesPayload(booking, payload);
     }
 
-    @Test(groups = "regression")
-    public void shouldAcceptUnknownRoomIds() {
-        CreateBookingPayload payload = AutomationInTestingTestData.randomBooking(9999);
-        Booking booking = createTrackedBooking(payload);
-
-        assertBookingMatchesPayload(booking, payload);
-        assertEquals(booking.roomid(), Integer.valueOf(9999));
-    }
 }

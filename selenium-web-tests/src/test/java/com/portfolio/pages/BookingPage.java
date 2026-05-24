@@ -18,12 +18,9 @@ public class BookingPage extends BasePage {
     private static final By ROOM_LIST_HEADING = By.xpath(
             "//*[self::h1 or self::h2 or self::h3][normalize-space()='Our Rooms']"
     );
-    private static final By ROOMS_SECTION = By.id("rooms");
     private static final By BOOKING_SECTION = By.id("booking");
     private static final By CHECK_AVAILABILITY_BUTTON = By.xpath("//button[normalize-space()='Check Availability']");
-    private static final By BOOK_NOW_LINKS = By.xpath(
-            "//a[starts-with(@href, '/reservation/') and normalize-space()='Book now']"
-    );
+    private static final By BOOK_NOW_LINKS = By.cssSelector("#rooms a[href^='/reservation/']");
 
     public BookingPage(WebDriver driver, String baseUrl) {
         super(driver, baseUrl);
@@ -49,12 +46,19 @@ public class BookingPage extends BasePage {
         assertFalse(bookNowLinks().isEmpty(), "At least one room should expose a Book now link");
     }
 
+    public void expectBookNowLinksAtLeast(int minimumCount) {
+        assertTrue(
+                bookNowLinks().size() >= minimumCount,
+                "Rooms section should expose at least " + minimumCount + " Book now links"
+        );
+    }
+
     public void expectRoomSummaries() {
         visible(ROOM_LIST_HEADING);
         String roomsText;
         try {
             roomsText = wait.until(unused -> {
-                String candidate = driver.findElement(ROOMS_SECTION).getText();
+                String candidate = driver.findElement(By.id("rooms")).getText();
                 return candidate.contains("Single") && candidate.contains("Double")
                         ? candidate
                         : null;
