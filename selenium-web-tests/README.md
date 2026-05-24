@@ -1,15 +1,17 @@
 # Selenium Web Tests
 
-Gradle module reserved for Selenium-based web UI automation examples.
+Selenium WebDriver + Java UI tests for the public Automation in Testing / Shady Meadows B&B demo site.
+
+## Coverage Snapshot
+
+- 5 UI test cases
+- 5 browser flows: booking availability, booking creation entry flow, booking cancel flow, room details navigation, and contact message submission
 
 ## Stack
 - Java
 - Selenium WebDriver
 - JUnit 5
 - Gradle
-
-## Current status
-This module is wired into the root Gradle build, but it currently contains only a placeholder Java class and no executable Selenium tests yet.
 
 ## Run
 From the repository root:
@@ -18,7 +20,7 @@ From the repository root:
 ./gradlew :selenium-web-tests:test
 ```
 
-This currently completes with `NO-SOURCE` until test classes are added under `src/test/java`.
+Set `AUTOMATION_IN_TESTING_BASE_URL` to target another deployment. The tests run headless by default; set `SELENIUM_HEADLESS=false` to open a visible browser.
 
 ## Portfolio runner
 This module is included in:

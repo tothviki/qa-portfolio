@@ -1,3 +1,10 @@
 plugins {
     id 'java'
 }
+
+dependencies {
+    testImplementation "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
+}

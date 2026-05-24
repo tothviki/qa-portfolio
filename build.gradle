@@ -142,7 +142,7 @@ tasks.register('portfolioFullTest') {
 }
 
 tasks.named('check') {
-    dependsOn 'portfolioTest'
+    dependsOn 'javaTest'
 }
 
 // Ensure default `build` runs all modules

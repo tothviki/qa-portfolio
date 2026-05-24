@@ -20,7 +20,7 @@ with one flagship module and supporting layers beneath it.
 | Flagship | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
 | Core API | [rest-assured-api-tests](rest-assured-api-tests) | 22 TestNG tests across auth, booking CRUD, and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
 | Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
-| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Additional browser, mobile, and performance coverage | Module-specific outputs |
+| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium and JMeter: additional mobile and performance coverage | `selenium-web-tests/build/reports/tests/test/index.html` |
 
 ## Portfolio Highlights
 
@@ -82,7 +82,9 @@ that are easy to review, run locally and integrate into automated workflows.
 **Selenium WebDriver + Java**
 
 Web UI automation examples demonstrating browser-based testing structure and
-Selenium WebDriver usage.
+Selenium WebDriver usage. Covers 5 UI test cases across booking availability,
+booking creation entry flow, booking cancel flow, room details navigation and
+contact message submission.
 
 → [selenium-web-tests](selenium-web-tests)
 
