@@ -11,5 +11,7 @@ public record ScenarioDefinition(
     int expectedStatus,
     int users,
     int loops,
-    int rampUpSeconds) {
+    int rampUpSeconds,
+    long maxAverageResponseTimeMillis,
+    long maxMaxResponseTimeMillis) {
 }

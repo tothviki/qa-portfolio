@@ -2,7 +2,7 @@ plugins {
     id 'base'
 }
 
-def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
+def npmExecutable = providers.gradleProperty('npmExecutable').orElse('npm')
 def postmanEnvironment = providers.gradleProperty('postmanEnvironment').orElse('production')
 def reportDir = layout.buildDirectory.dir('reports/postman')
 
@@ -27,17 +27,27 @@ def postmanCollections = [
         ]
 ]
 
+tasks.register('npmInstall', Exec) {
+    group = 'build'
+    description = 'Installs the pinned Newman dependency for Postman collections.'
+
+    commandLine npmExecutable.get(), 'ci'
+}
+
 postmanCollections.each { collection ->
     tasks.register("postman${collection.taskName}Test", Exec) {
         group = 'verification'
         description = "Runs the Postman ${collection.display} collection with Newman."
 
+        dependsOn 'npmInstall'
+
         doFirst {
             reportDir.get().asFile.mkdirs()
         }
 
-        commandLine npxExecutable.get(),
-                '--yes',
+        commandLine npmExecutable.get(),
+                'exec',
+                '--',
                 'newman',
                 'run',
                 collection.collection,
@@ -53,12 +63,15 @@ postmanCollections.each { collection ->
         group = 'verification'
         description = "Runs the Postman ${collection.display} collection against the local environment."
 
+        dependsOn 'npmInstall'
+
         doFirst {
             reportDir.get().asFile.mkdirs()
         }
 
-        commandLine npxExecutable.get(),
-                '--yes',
+        commandLine npmExecutable.get(),
+                'exec',
+                '--',
                 'newman',
                 'run',
                 collection.collection,

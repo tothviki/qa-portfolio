@@ -1,0 +1,8 @@
+{
+  "name": "postman-api-tests",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "newman": "5.3.2"
+  }
+}

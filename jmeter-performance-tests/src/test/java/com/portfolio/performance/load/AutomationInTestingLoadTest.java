@@ -1,6 +1,7 @@
 package com.portfolio.performance.load;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.portfolio.performance.core.JMeterScenarioRunner;
 import com.portfolio.performance.core.ScenarioResult;
@@ -31,10 +32,14 @@ class AutomationInTestingLoadTest {
                 .users(3)
                 .loops(2)
                 .rampUpSeconds(2)
+                .maxAverageResponseTimeMillis(2500)
+                .maxMaxResponseTimeMillis(6000)
                 .build());
 
         assertEquals(0, result.failureCount(), result.describe());
         assertEquals(6, result.sampleCount(), result.describe());
+        assertTrue(result.averageResponseTimeMillis() <= 2500, result.describe());
+        assertTrue(result.maxResponseTimeMillis() <= 6000, result.describe());
     }
 
     @Test
@@ -49,10 +54,14 @@ class AutomationInTestingLoadTest {
                 .users(4)
                 .loops(2)
                 .rampUpSeconds(1)
+                .maxAverageResponseTimeMillis(2000)
+                .maxMaxResponseTimeMillis(5000)
                 .build());
 
         assertEquals(0, result.failureCount(), result.describe());
         assertEquals(8, result.sampleCount(), result.describe());
+        assertTrue(result.averageResponseTimeMillis() <= 2000, result.describe());
+        assertTrue(result.maxResponseTimeMillis() <= 5000, result.describe());
     }
 
     private static String authPayload() {

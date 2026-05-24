@@ -21,6 +21,7 @@ test('E2E - API booking affects public room availability @e2e @smoke', async ({ 
   await test.step('Search the same dates on the public booking UI', async () => {
     await bookingPage.goto();
     await bookingPage.searchAvailability(bookingData.bookingdates.checkin, bookingData.bookingdates.checkout);
+    await bookingPage.expectFirstBookingLinkDates(bookingData.bookingdates.checkin, bookingData.bookingdates.checkout);
   });
 
   await test.step('Verify the already booked room is unavailable', async () => {

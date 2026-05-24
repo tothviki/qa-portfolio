@@ -2,65 +2,6 @@ plugins {
     id 'base'
 }
 
-def npmExecutable = providers.gradleProperty('npmExecutable').orElse('npm')
-def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
-
-tasks.register('npmInstall', Exec) {
-    group = 'build'
-    description = 'Installs Playwright project npm dependencies.'
-
-    commandLine npmExecutable.get(), 'install'
-}
-
-tasks.register('playwrightTest', Exec) {
-    group = 'verification'
-    description = 'Runs the active Playwright test suite.'
-
-    commandLine npmExecutable.get(), 'run', 'test'
-}
-
-tasks.register('playwrightApiTest', Exec) {
-    group = 'verification'
-    description = 'Runs Playwright API tests.'
-
-    commandLine npmExecutable.get(), 'run', 'test:api'
-}
-
-tasks.register('playwrightWebTest', Exec) {
-    group = 'verification'
-    description = 'Reports that Playwright web tests are quarantined.'
-
-    commandLine npmExecutable.get(), 'run', 'test:web'
-}
-
-tasks.register('playwrightUiTest', Exec) {
-    group = 'verification'
-    description = 'Runs Playwright UI / web tests (tagged with @ui).'
-
-    commandLine npmExecutable.get(), 'run', 'test:web'
-}
-
-tasks.register('playwrightSmokeTest', Exec) {
-    group = 'verification'
-    description = 'Runs Playwright smoke tests.'
-
-    commandLine npmExecutable.get(), 'run', 'test:smoke'
-}
-
-tasks.register('playwrightReport', Exec) {
-    group = 'verification'
-    description = 'Opens the Playwright HTML report.'
-
-    commandLine npxExecutable.get(), 'playwright', 'show-report'
-}
-
-tasks.register('playwrightTypeCheck', Exec) {
-    group = 'verification'
-    description = 'Runs TypeScript type checking for active Playwright code.'
-
-    commandLine npmExecutable.get(), 'run', 'typecheck'
-}
-
 tasks.named('clean') {
     delete 'allure-results'
     delete 'playwright-report'
@@ -134,6 +75,12 @@ tasks.register('portfolioTest') {
     description = 'Runs the recommended portfolio validation: Playwright, REST Assured, and Postman.'
 
     dependsOn ':rest-assured-api-tests:test'
+    dependsOn ':playwright-tests:playwrightTypeCheck'
+    dependsOn ':playwright-tests:playwrightTest'
+    dependsOn ':postman-api-tests:postmanTest'
+}
+
+tasks.named('check') {
     dependsOn ':playwright-tests:playwrightTypeCheck'
     dependsOn ':playwright-tests:playwrightTest'
     dependsOn ':postman-api-tests:postmanTest'

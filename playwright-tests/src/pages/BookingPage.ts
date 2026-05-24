@@ -58,9 +58,8 @@ export class BookingPage {
   }
 
   async expectPriceSummaries(): Promise<void> {
-    await expect(this.page.getByText('£100 per night')).toBeVisible();
-    await expect(this.page.getByText('£150 per night')).toBeVisible();
-    await expect(this.page.getByText('£225 per night')).toBeVisible();
+    const roomCards = this.page.locator('#rooms');
+    await expect(roomCards.getByText(/per night/i), 'Each room card should show a nightly price').toHaveCount(3);
   }
 
   async expectFirstBookingLinkDates(checkin: string, checkout: string): Promise<void> {

@@ -30,7 +30,9 @@ The suite targets `https://automationintesting.online` by default. Set `AUTOMATI
 | E2E   | `src/e2e` | `e2e`, `e2e-firefox`, `e2e-webkit`     | Cross-layer checks where API-created booking data changes public room availability.                                                |
 
 ## Reviewer Path
+
 For a fast review, inspect these areas first:
+
 1. `src/fixtures/automationInTesting.fixture.ts` - shared API fixture and cleanup.
 2. `src/utils/automationInTestingClient.ts` - reusable API client abstraction.
 3. `src/pages/BookingPage.ts` and `src/pages/ContactPage.ts` - page-object structure.
@@ -74,6 +76,7 @@ Generated data is run-scoped with `TEST_RUN_ID` or a timestamp fallback from `Au
 UI booking tests are intentionally read-only for persistent room bookings. They validate availability search, reservation entry points, room details, contact forms, and pre-submit cancellation without completing a public-site booking. Full booking create/update/delete assertions are API-level, with the current E2E journey using API-managed setup to verify that a booked room becomes unavailable in the UI.
 
 ## Design Choices
+
 - API-created bookings are tracked and deleted during fixture teardown to avoid polluting the public demo service.
 - Browser tests avoid final public booking submission and focus on observable UI behavior that can be validated safely.
 - API tests own booking CRUD depth because they are faster, more stable, and easier to clean up than equivalent UI flows.
