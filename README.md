@@ -18,14 +18,14 @@ with one flagship module and supporting layers beneath it.
 | Tier | Module | Coverage | Report |
 | --- | --- | --- | --- |
 | Flagship | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
-| Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
 | Core API | [rest-assured-api-tests](rest-assured-api-tests) | 22 TestNG tests across auth, booking CRUD, and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
+| Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
 | Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Additional browser, mobile, and performance coverage | Module-specific outputs |
 
 ## Portfolio Highlights
 
 - Flagship case study: Playwright + TypeScript API, UI and E2E automation suite
-- Core API case studies: Postman/Newman and REST Assured
+- Core API case studies: REST Assured and Postman/Newman
 - Supporting modules: Selenium WebDriver, Appium and JMeter
 - Repository-level Gradle tasks for repeatable portfolio validation
 - Module-level commands for focused API, UI, mobile and performance test runs
@@ -57,15 +57,6 @@ validation and reporting.
 
 ### Core API Case Studies
 
-#### Postman API Tests
-
-**Postman + Newman**
-
-Focused Postman collections with Newman command-line execution for API checks
-that are easy to review, run locally and integrate into automated workflows.
-
-→ [postman-api-tests](postman-api-tests)
-
 #### REST Assured API Tests
 
 **REST Assured + Java**
@@ -74,6 +65,15 @@ Java-based API test suite demonstrating request and response validation,
 reusable test structure and regression-oriented API checks.
 
 → [rest-assured-api-tests](rest-assured-api-tests)
+
+#### Postman API Tests
+
+**Postman + Newman**
+
+Focused Postman collections with Newman command-line execution for API checks
+that are easy to review, run locally and integrate into automated workflows.
+
+→ [postman-api-tests](postman-api-tests)
 
 ### Supporting Modules
 
@@ -210,8 +210,8 @@ Pass multiple tasks in one command:
 If you are reviewing this portfolio quickly, start here:
 
 1. [playwright-tests](playwright-tests) – strongest and most complete module
-2. [postman-api-tests](postman-api-tests) – secondary API case study
-3. [rest-assured-api-tests](rest-assured-api-tests) – secondary API case study
+2. [rest-assured-api-tests](rest-assured-api-tests) – secondary API case study
+3. [postman-api-tests](postman-api-tests) – secondary API case study
 
 The remaining modules demonstrate additional tool coverage across Selenium,
 Appium and JMeter.
