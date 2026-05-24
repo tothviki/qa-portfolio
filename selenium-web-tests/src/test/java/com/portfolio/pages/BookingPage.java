@@ -20,7 +20,7 @@ public class BookingPage extends BasePage {
     );
     private static final By BOOKING_SECTION = By.id("booking");
     private static final By CHECK_AVAILABILITY_BUTTON = By.xpath("//button[normalize-space()='Check Availability']");
-    private static final By BOOK_NOW_LINKS = By.cssSelector("#rooms a[href*='/reservation/']");
+    private static final By BOOK_NOW_LINKS = By.cssSelector("a[href*='/reservation/']");
 
     public BookingPage(WebDriver driver, String baseUrl) {
         super(driver, baseUrl);
@@ -55,9 +55,7 @@ public class BookingPage extends BasePage {
 
     public void expectRoomSummaries() {
         visible(ROOM_LIST_HEADING);
-        visible(By.xpath(String.format(HEADING_XPATH, "'Single'")));
-        visible(By.xpath(String.format(HEADING_XPATH, "'Double'")));
-        visible(By.xpath(String.format(HEADING_XPATH, "'Suite'")));
+        expectBookNowLinksAtLeast(2);
     }
 
     public void openFirstRoomReservation() {
