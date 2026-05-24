@@ -1,10 +1,10 @@
 package com.portfolio.models;
 
-public record Booking(
-        Integer bookingid,
+public record UpdateBookingPayload(
         Integer roomid,
         String firstname,
         String lastname,
         Boolean depositpaid,
-        BookingDates bookingdates) {
+        BookingDates bookingdates
+) {
 }
