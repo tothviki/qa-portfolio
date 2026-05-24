@@ -2,8 +2,14 @@
 
 Postman/Newman API automation demo for the public Automation in Testing service.
 
+## Coverage Snapshot
+
+- 3 focused collections covering 24 unique checks across auth, booking CRUD, public API, and edge cases
+- 2 execution environments: production and local
+- JSON reports: `build/reports/postman/*-newman-report.json`
+
 ## Stack
-- Postman collection
+- Focused Postman collections
 - Newman
 - Gradle wrapper tasks for portfolio-level execution
 
@@ -35,7 +41,17 @@ Select an environment by property:
 ./gradlew :postman-api-tests:postmanTest -PpostmanEnvironment=local
 ```
 
+Run a focused collection:
+
+```bash
+./gradlew :postman-api-tests:postmanAuthenticationTest
+./gradlew :postman-api-tests:postmanBookingTest
+./gradlew :postman-api-tests:postmanPublicApiTest
+```
+
 ## Files
-- `collections/Restful-Booker-API-Tests.json`
+- `collections/authentication-api-tests.postman_collection.json`
+- `collections/booking-api-tests.postman_collection.json`
+- `collections/public-api-tests.postman_collection.json`
 - `environments/production.postman_environment.json`
 - `environments/local.postman_environment.json`

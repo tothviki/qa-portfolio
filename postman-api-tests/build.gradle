@@ -6,54 +6,97 @@ def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
 def postmanEnvironment = providers.gradleProperty('postmanEnvironment').orElse('production')
 def reportDir = layout.buildDirectory.dir('reports/postman')
 
-tasks.register('postmanTest', Exec) {
-    group = 'verification'
-    description = 'Runs the Postman collection with Newman.'
+def postmanCollections = [
+        [
+                taskName  : 'Authentication',
+                display   : 'authentication API',
+                collection: 'collections/authentication-api-tests.postman_collection.json',
+                reportBase: 'authentication'
+        ],
+        [
+                taskName  : 'Booking',
+                display   : 'booking API',
+                collection: 'collections/booking-api-tests.postman_collection.json',
+                reportBase: 'booking'
+        ],
+        [
+                taskName  : 'PublicApi',
+                display   : 'public API',
+                collection: 'collections/public-api-tests.postman_collection.json',
+                reportBase: 'public-api'
+        ]
+]
 
-    dependsOn 'cleanPostmanReports'
+postmanCollections.each { collection ->
+    tasks.register("postman${collection.taskName}Test", Exec) {
+        group = 'verification'
+        description = "Runs the Postman ${collection.display} collection with Newman."
 
-    doFirst {
-        reportDir.get().asFile.mkdirs()
+        doFirst {
+            reportDir.get().asFile.mkdirs()
+        }
+
+        commandLine npxExecutable.get(),
+                '--yes',
+                'newman',
+                'run',
+                collection.collection,
+                '--environment',
+                "environments/${postmanEnvironment.get()}.postman_environment.json",
+                '--reporters',
+                'cli,json',
+                '--reporter-json-export',
+                reportDir.map { it.file("${collection.reportBase}-newman-report.json").asFile.path }.get()
     }
 
-    commandLine npxExecutable.get(),
-            '--yes',
-            'newman',
-            'run',
-            'collections/Restful-Booker-API-Tests.json',
-            '--environment',
-            "environments/${postmanEnvironment.get()}.postman_environment.json",
-            '--reporters',
-            'cli,json',
-            '--reporter-json-export',
-            reportDir.map { it.file('newman-report.json').asFile.path }.get()
+    tasks.register("postman${collection.taskName}LocalTest", Exec) {
+        group = 'verification'
+        description = "Runs the Postman ${collection.display} collection against the local environment."
+
+        doFirst {
+            reportDir.get().asFile.mkdirs()
+        }
+
+        commandLine npxExecutable.get(),
+                '--yes',
+                'newman',
+                'run',
+                collection.collection,
+                '--environment',
+                'environments/local.postman_environment.json',
+                '--reporters',
+                'cli,json',
+                '--reporter-json-export',
+                reportDir.map { it.file("${collection.reportBase}-local-newman-report.json").asFile.path }.get()
+    }
 }
 
-tasks.register('postmanLocalTest', Exec) {
+tasks.register('postmanTest') {
     group = 'verification'
-    description = 'Runs the Postman collection against the local environment.'
+    description = 'Runs all Postman collections with Newman.'
 
     dependsOn 'cleanPostmanReports'
+    dependsOn postmanCollections.collect { "postman${it.taskName}Test" }
+}
 
-    doFirst {
-        reportDir.get().asFile.mkdirs()
-    }
+tasks.register('postmanLocalTest') {
+    group = 'verification'
+    description = 'Runs all Postman collections against the local environment.'
 
-    commandLine npxExecutable.get(),
-            '--yes',
-            'newman',
-            'run',
-            'collections/Restful-Booker-API-Tests.json',
-            '--environment',
-            'environments/local.postman_environment.json',
-            '--reporters',
-            'cli,json',
-            '--reporter-json-export',
-            reportDir.map { it.file('newman-local-report.json').asFile.path }.get()
+    dependsOn 'cleanPostmanReports'
+    dependsOn postmanCollections.collect { "postman${it.taskName}LocalTest" }
 }
 
 tasks.register('cleanPostmanReports', Delete) {
     delete reportDir
+}
+
+tasks.matching { task ->
+    task.name.startsWith('postman') &&
+            task.name != 'postmanTest' &&
+            task.name != 'postmanLocalTest'
+}.configureEach {
+    mustRunAfter 'cleanPostmanReports'
 }
 
 tasks.named('clean') {

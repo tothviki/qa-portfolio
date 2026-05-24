@@ -1,13 +1,13 @@
 {
   "info": {
-    "_postman_id": "automation-in-testing-api-tests",
-    "name": "Automation in Testing API Tests",
+    "_postman_id": "automation-in-testing-booking-api-tests",
+    "name": "Automation in Testing - Booking API Tests",
     "description": "API test suite aligned with the Playwright automation-in-testing coverage.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "1. Authentication",
+      "name": "1. Authentication Setup",
       "item": [
         {
           "name": "POST /api/auth/login should create token with valid credentials",
@@ -52,50 +52,6 @@
                   "});",
                   "",
                   "pm.environment.set('authToken', pm.response.json().token);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "POST /api/auth/login should reject invalid credentials",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"wrong-password\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 401', () => {",
-                  "  pm.response.to.have.status(401);",
-                  "});",
-                  "",
-                  "pm.test('Response contains invalid credentials error', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body.error).to.eql('Invalid credentials');",
-                  "});"
                 ]
               }
             }
@@ -831,151 +787,7 @@
       ]
     },
     {
-      "name": "3. Public API",
-      "item": [
-        {
-          "name": "GET /api/booking/actuator/health should return UP status",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/booking/actuator/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "booking",
-                "actuator",
-                "health"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', () => {",
-                  "  pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test('Response status is UP', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body.status).to.eql('UP');",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "GET /api/room should return bookable rooms",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/room",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "room"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', () => {",
-                  "  pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test('Response contains accessible rooms', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body).to.have.property('rooms');",
-                  "  pm.expect(body.rooms).to.be.an('array');",
-                  "  pm.expect(body.rooms.length).to.be.greaterThan(0);",
-                  "  pm.expect(body.rooms.some((room) => room.accessible)).to.eql(true);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "GET /api/branding should return hotel branding",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/branding",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "branding"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', () => {",
-                  "  pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test('Response contains branding name', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body.name).to.be.ok;",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "GET /api/message should return message summaries",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/message",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "message"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', () => {",
-                  "  pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test('Response contains messages', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body).to.have.property('messages');",
-                  "  pm.expect(body.messages).to.be.an('array');",
-                  "  pm.expect(body.messages.length).to.be.greaterThan(0);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "4. Cleanup",
+      "name": "3. Cleanup",
       "item": [
         {
           "name": "DELETE created booking from punctuation test",
