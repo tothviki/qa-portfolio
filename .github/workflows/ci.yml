@@ -9,15 +9,14 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  java-tests:
-    name: Java and REST Assured tests
+  rest-assured-api-tests:
+    name: REST Assured API tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -39,10 +38,10 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-      - name: Run Java tests
-        run: ./gradlew javaTest
+      - name: Run REST Assured API tests
+        run: ./gradlew :rest-assured-api-tests:test
 
-      - name: Upload Gradle test reports
+      - name: Upload REST Assured reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -50,6 +49,114 @@ jobs:
           path: |
             rest-assured-api-tests/build/reports/tests/test/
             rest-assured-api-tests/build/test-results/test/
+          if-no-files-found: ignore
+
+  selenium-web-tests:
+    name: Selenium web tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Run Selenium web tests
+        run: ./gradlew :selenium-web-tests:test
+
+      - name: Upload Selenium reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-web-test-reports
+          path: |
+            selenium-web-tests/build/reports/tests/test/
+            selenium-web-tests/build/test-results/test/
+          if-no-files-found: ignore
+
+  appium-mobile-tests:
+    name: Appium mobile tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Run Appium mobile tests
+        run: ./gradlew :appium-mobile-tests:test
+
+      - name: Upload Appium reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-mobile-test-reports
+          path: |
+            appium-mobile-tests/build/reports/tests/test/
+            appium-mobile-tests/build/test-results/test/
+          if-no-files-found: ignore
+
+  jmeter-performance-tests:
+    name: JMeter performance tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Run JMeter performance tests
+        run: ./gradlew :jmeter-performance-tests:test
+
+      - name: Upload JMeter reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-performance-test-reports
+          path: |
+            jmeter-performance-tests/build/reports/tests/test/
+            jmeter-performance-tests/build/test-results/test/
           if-no-files-found: ignore
 
   playwright-tests:
@@ -103,60 +210,8 @@ jobs:
             playwright-tests/test-results/
           if-no-files-found: ignore
 
-  playwright-full-browser-tests:
-    name: Playwright full browser suite
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: 'temurin'
-
-      - name: Set up Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: playwright-tests/package-lock.json
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-      - name: Install Playwright dependencies
-        working-directory: playwright-tests
-        run: npm ci
-
-      - name: Install Playwright browsers
-        working-directory: playwright-tests
-        run: npx playwright install --with-deps
-
-      - name: Run full Playwright suite
-        run: ./gradlew :playwright-tests:playwrightTypeCheck :playwright-tests:playwrightTest
-
-      - name: Upload Playwright reports
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-full-browser-reports
-          path: |
-            playwright-tests/playwright-report/
-            playwright-tests/test-results/
-          if-no-files-found: ignore
-
-  postman-tests:
-    name: Postman tests (non-blocking)
+  postman-api-tests:
+    name: Postman API tests (non-blocking)
     runs-on: ubuntu-latest
     continue-on-error: true
     timeout-minutes: 10
