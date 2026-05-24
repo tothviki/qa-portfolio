@@ -20,7 +20,7 @@ with one flagship module and supporting layers beneath it.
 | Flagship | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
 | Core API | [rest-assured-api-tests](rest-assured-api-tests) | 20 TestNG tests across auth, booking CRUD, and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
 | Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
-| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium: mobile coverage; JMeter: 2 executable scenarios, 14 total samples | `selenium-web-tests/build/reports/tests/test/index.html`<br>`jmeter-performance-tests/build/reports/tests/test/index.html` |
+| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium: 3 mobile web test cases on Android Chrome; JMeter: 2 executable scenarios, 14 total samples | `selenium-web-tests/build/reports/tests/test/index.html`<br>`jmeter-performance-tests/build/reports/tests/test/index.html` |
 
 ## Portfolio Highlights
 
@@ -92,8 +92,9 @@ contact message submission.
 
 **Appium + Java**
 
-Mobile automation examples demonstrating Appium-based test structure for mobile
-QA scenarios.
+Mobile web automation examples demonstrating an Appium page-object structure for
+Android Chrome against the public Automation in Testing site. Covers 3 test
+cases: booking search, reservation-page navigation and contact-form validation.
 
 → [appium-mobile-tests](appium-mobile-tests)
 
@@ -205,6 +206,7 @@ Pass multiple tasks in one command:
 - API testing across multiple approaches: Playwright API, REST Assured and Postman/Newman
 - Maintainable test design with fixtures, helpers, page objects and reusable test data
 - Regression-oriented test coverage across API, web, mobile and performance areas
+- Mobile browser automation against a real public site with Appium
 - Practical experience with Gradle-based orchestration across multiple QA modules
 - Ability to document, structure and maintain test automation projects for review
 

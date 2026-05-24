@@ -1,3 +1,12 @@
 plugins {
     id 'java'
 }
+
+dependencies {
+    testImplementation "io.appium:java-client:$appiumVersion"
+    testImplementation "org.seleniumhq.selenium:selenium-java:$appiumSeleniumVersion"
+
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+}
