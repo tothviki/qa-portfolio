@@ -1,14 +1,22 @@
 # JMeter Performance Tests
 
-Gradle module reserved for JMeter performance testing examples.
+Gradle module for executable JMeter performance testing examples.
 
 ## Stack
 - JMeter
-- Java/Gradle module wrapper
+- Java/Gradle
 - Gradle portfolio runner
 
 ## Current status
-This module is wired into the root Gradle build, but it currently contains only a placeholder Java class and no executable JMeter test plan integration yet.
+This module is wired into the root Gradle build and now includes executable JMeter-based performance tests:
+- 2 executable scenarios
+- 14 total samples across both scenarios:
+  - `POST /api/auth/login`: 6 samples
+  - `GET /api/room`: 8 samples
+
+## Scenarios
+- `POST /api/auth/login` submission load test
+- `GET /api/room` concurrent room catalog lookup test
 
 ## Run
 From the repository root:
@@ -17,7 +25,7 @@ From the repository root:
 ./gradlew :jmeter-performance-tests:test
 ```
 
-This currently completes with `NO-SOURCE` until test execution is added.
+This runs the JMeter-backed performance tests in `src/test/java`.
 
 ## Portfolio runner
 This module is included in:

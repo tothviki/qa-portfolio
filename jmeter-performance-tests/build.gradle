@@ -1,3 +1,14 @@
 plugins {
     id 'java'
 }
+
+dependencies {
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testImplementation "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation "org.apache.jmeter:ApacheJMeter_http:$jmeterVersion"
+    testImplementation "org.apache.jmeter:jorphan:$jmeterVersion"
+}

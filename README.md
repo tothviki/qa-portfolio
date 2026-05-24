@@ -20,7 +20,7 @@ with one flagship module and supporting layers beneath it.
 | Flagship | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
 | Core API | [rest-assured-api-tests](rest-assured-api-tests) | 20 TestNG tests across auth, booking CRUD, and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
 | Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
-| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium and JMeter: additional mobile and performance coverage | `selenium-web-tests/build/reports/tests/test/index.html` |
+| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium: mobile coverage; JMeter: 2 executable scenarios, 14 total samples | `selenium-web-tests/build/reports/tests/test/index.html`<br>`jmeter-performance-tests/build/reports/tests/test/index.html` |
 
 ## Portfolio Highlights
 
@@ -102,6 +102,7 @@ QA scenarios.
 **JMeter + Gradle**
 
 Performance testing examples integrated with Gradle for repeatable execution.
+Covers: 2 executable scenarios, 14 total samples across the login and room catalog load tests.
 
 → [jmeter-performance-tests](jmeter-performance-tests)
 
