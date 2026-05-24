@@ -1,8 +1,8 @@
 package com.portfolio.payloads;
 
-import com.portfolio.models.BookingDates;
-import com.portfolio.models.CreateBookingPayload;
-import com.portfolio.models.UpdateBookingPayload;
+import com.portfolio.models.booking.BookingDates;
+import com.portfolio.models.booking.CreateBookingPayload;
+import com.portfolio.models.booking.UpdateBookingPayload;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutomationInTestingTestData {
-
     private static final String RUN_ID = System.getenv().getOrDefault("TEST_RUN_ID", Long.toString(System.currentTimeMillis(), 36));
     private static final AtomicInteger SEQUENCE = new AtomicInteger();
 
     private AutomationInTestingTestData() {
+        throw new IllegalStateException("Utility class");
     }
 
     private static String nextId(String prefix) {
@@ -68,96 +68,111 @@ public class AutomationInTestingTestData {
         );
     }
 
-    public static UpdateBookingPayload updatedBooking() {
-        return updatedBooking(1);
-    }
-
     public static UpdateBookingPayload updatedBooking(int roomId) {
         return new UpdateBookingPayload(
                 roomId,
                 "UpdatedFirst",
                 "UpdatedLast",
                 false,
-                new BookingDates("2028-01-14", "2028-01-16")
+                futureDates(6, 2)
         );
     }
 
-    public static CreateBookingPayload namedBooking(String firstname, String lastname) {
-        return namedBooking(firstname, lastname, 1);
-    }
-
-    public static CreateBookingPayload namedBooking(String firstname, String lastname, int roomId) {
+    public static CreateBookingPayload temporaryBooking(int roomId) {
         return new CreateBookingPayload(
                 roomId,
-                firstname,
-                lastname,
+                "TempFirst",
+                "TempLast",
                 true,
-                firstname.toLowerCase() + "." + lastname.toLowerCase() + "." + nextId("named") + "@example.com",
-                "07" + String.format("%02d", SEQUENCE.incrementAndGet()).repeat(5).substring(0, 9),
+                "temp.first." + nextId("update") + "@example.com",
+                "07123456789",
                 futureDates(4, 2)
         );
     }
 
     public static Map<String, Object> invalidBookingPayload() {
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("roomid", 1);
-        payload.put("firstname", "Al");
-        payload.put("lastname", "");
-        payload.put("depositpaid", true);
-        payload.put("email", "not-an-email");
-        payload.put("phone", "123");
-        Map<String, Object> bookingDates = new LinkedHashMap<>();
-        bookingDates.put("checkin", "");
-        bookingDates.put("checkout", "");
-        payload.put("bookingdates", bookingDates);
-        return payload;
+        return bookingPayload(
+                1,
+                "Al",
+                "",
+                true,
+                "not-an-email",
+                "123",
+                dateMap("", "")
+        );
     }
 
     public static Map<String, Object> missingFirstnamePayload() {
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("roomid", 1);
-        payload.put("lastname", "Case");
-        payload.put("depositpaid", true);
-        payload.put("email", "edge@example.com");
-        payload.put("phone", "07123456789");
-        payload.put("bookingdates", futureDateMap(5, 2));
+        Map<String, Object> payload = validBookingPayload();
+        payload.remove("firstname");
         return payload;
     }
 
     public static Map<String, Object> missingLastnamePayload() {
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("roomid", 1);
-        payload.put("firstname", "Case");
-        payload.put("depositpaid", true);
-        payload.put("email", "edge@example.com");
-        payload.put("phone", "07123456789");
-        payload.put("bookingdates", futureDateMap(5, 2));
+        Map<String, Object> payload = validBookingPayload();
+        payload.remove("lastname");
         return payload;
     }
 
     public static Map<String, Object> checkoutBeforeCheckinPayload() {
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("roomid", 1);
-        payload.put("firstname", "Edge");
-        payload.put("lastname", "Case");
-        payload.put("depositpaid", true);
-        payload.put("email", "edge@example.com");
-        payload.put("phone", "07123456789");
-        Map<String, Object> bookingDates = new LinkedHashMap<>();
-        bookingDates.put("checkin", "2028-01-12");
-        bookingDates.put("checkout", "2028-01-10");
-        payload.put("bookingdates", bookingDates);
-        return payload;
+        return bookingPayload(
+                1,
+                "Edge",
+                "Case",
+                true,
+                "edge@example.com",
+                "07123456789",
+                dateMap(isoDateFromToday(8), isoDateFromToday(6))
+        );
     }
 
     public static String malformedBookingPayload() {
         return "{roomid:";
     }
 
+    private static Map<String, Object> validBookingPayload() {
+        return bookingPayload(
+                1,
+                "Edge",
+                "Case",
+                true,
+                "edge@example.com",
+                "07123456789",
+                futureDateMap(5, 2)
+        );
+    }
+
+    private static Map<String, Object> bookingPayload(
+            int roomId,
+            String firstname,
+            String lastname,
+            boolean depositPaid,
+            String email,
+            String phone,
+            Map<String, Object> bookingDates
+    ) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("roomid", roomId);
+        payload.put("firstname", firstname);
+        payload.put("lastname", lastname);
+        payload.put("depositpaid", depositPaid);
+        payload.put("email", email);
+        payload.put("phone", phone);
+        payload.put("bookingdates", bookingDates);
+        return payload;
+    }
+
     private static Map<String, Object> futureDateMap(int startDayOffset, int stayLength) {
+        return dateMap(
+                isoDateFromToday(startDayOffset),
+                isoDateFromToday(startDayOffset + stayLength)
+        );
+    }
+
+    private static Map<String, Object> dateMap(String checkin, String checkout) {
         Map<String, Object> bookingDates = new LinkedHashMap<>();
-        bookingDates.put("checkin", isoDateFromToday(startDayOffset));
-        bookingDates.put("checkout", isoDateFromToday(startDayOffset + stayLength));
+        bookingDates.put("checkin", checkin);
+        bookingDates.put("checkout", checkout);
         return bookingDates;
     }
 }

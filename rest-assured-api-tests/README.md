@@ -56,7 +56,11 @@ Run grouped suites:
 rest-assured-api-tests/
 |-- src/test/java/com/portfolio/base/       # shared setup and cleanup
 |-- src/test/java/com/portfolio/clients/    # API request helpers
-|-- src/test/java/com/portfolio/models/     # request and response records
+|-- src/test/java/com/portfolio/models/     # request and response records grouped by API area
+|   |-- auth/
+|   |-- booking/
+|   |-- common/
+|   `-- site/
 |-- src/test/java/com/portfolio/payloads/   # test data factory
 `-- src/test/java/com/portfolio/tests/      # TestNG scenarios
 ```

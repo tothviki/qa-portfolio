@@ -1,7 +1,7 @@
 package com.portfolio.clients;
 
-import com.portfolio.models.CreateBookingPayload;
-import com.portfolio.models.UpdateBookingPayload;
+import com.portfolio.models.booking.CreateBookingPayload;
+import com.portfolio.models.booking.UpdateBookingPayload;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -10,6 +10,7 @@ import java.util.Map;
 public class BookingClient {
 
     private BookingClient() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static Response createBooking(CreateBookingPayload booking) {

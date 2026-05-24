@@ -4,13 +4,14 @@ import com.portfolio.clients.AuthClient;
 import com.portfolio.clients.BookingClient;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutomationInTestingBaseTest {
 
@@ -37,9 +38,9 @@ public class AutomationInTestingBaseTest {
 
         for (Integer bookingId : new ArrayList<>(trackedBookingIds)) {
             Response response = BookingClient.deleteBooking(bookingId, authToken);
-            Assert.assertEquals(
-                    response.statusCode(),
+            assertEquals(
                     202,
+                    response.statusCode(),
                     "Failed to delete tracked booking " + bookingId + ": " + response.asString()
             );
             trackedBookingIds.remove(bookingId);
@@ -52,5 +53,9 @@ public class AutomationInTestingBaseTest {
 
     protected void untrackBooking(int bookingId) {
         trackedBookingIds.remove(bookingId);
+    }
+
+    protected void assertStatus(Response response, int expectedStatus) {
+        assertEquals(response.statusCode(), expectedStatus, response.asString());
     }
 }

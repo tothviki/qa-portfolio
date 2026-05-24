@@ -1,4 +1,4 @@
-package com.portfolio.models;
+package com.portfolio.models.site;
 
 public record Message(
         Integer id,

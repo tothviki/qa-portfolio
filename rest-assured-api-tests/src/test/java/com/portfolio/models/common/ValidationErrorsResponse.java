@@ -1,4 +1,4 @@
-package com.portfolio.models;
+package com.portfolio.models.common;
 
 import java.util.List;
 

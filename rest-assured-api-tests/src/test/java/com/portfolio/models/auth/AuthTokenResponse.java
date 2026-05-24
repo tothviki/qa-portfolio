@@ -1,4 +1,4 @@
-package com.portfolio.models;
+package com.portfolio.models.auth;
 
 public record AuthTokenResponse(
         String token
