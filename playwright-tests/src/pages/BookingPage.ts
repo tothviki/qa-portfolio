@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { AUTOMATION_IN_TESTING_BASE_URL } from '../config/automationInTestingConfig';
 import { futureDate } from '../ui/uiHelpers';
 
 export class BookingPage {
@@ -30,7 +29,7 @@ export class BookingPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto(`${this.baseUrl}/#booking`);
+    await this.page.goto('/#booking');
     await expect(this.availabilityHeading, 'Booking availability heading should be visible').toBeVisible();
   }
 
@@ -131,9 +130,5 @@ export class BookingPage {
 
   get cancelButton(): Locator {
     return this.page.getByRole('button', { name: 'Cancel' });
-  }
-
-  private get baseUrl(): string {
-    return AUTOMATION_IN_TESTING_BASE_URL;
   }
 }

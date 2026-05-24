@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { AUTOMATION_IN_TESTING_BASE_URL } from '../config/automationInTestingConfig';
 
 export class ContactPage {
   readonly heading: Locator;
@@ -9,7 +8,7 @@ export class ContactPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto(`${this.baseUrl}/#contact`);
+    await this.page.goto('/#contact');
     await expect(this.heading, 'Contact form heading should be visible').toBeVisible();
   }
 
@@ -54,10 +53,6 @@ export class ContactPage {
 
   private get messageInput(): Locator {
     return this.page.locator('textarea').first();
-  }
-
-  private get baseUrl(): string {
-    return AUTOMATION_IN_TESTING_BASE_URL;
   }
 }
 
