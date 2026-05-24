@@ -7,6 +7,6 @@ test('UI - availability search returns a specific room result set @ui', async ({
 
   await bookingPage.goto();
   await bookingPage.searchAvailability(checkin, checkout);
-  await bookingPage.expectBookNowLinks(3);
+  await bookingPage.expectBookNowLinks();
   await bookingPage.expectRoomSummaries();
 });

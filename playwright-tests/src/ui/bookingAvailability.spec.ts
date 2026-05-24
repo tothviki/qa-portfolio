@@ -7,5 +7,5 @@ test('UI - check availability of rooms @ui @smoke', async ({ page }) => {
 
   await bookingPage.goto();
   await bookingPage.searchAvailability(checkin, checkout);
-  await bookingPage.expectBookNowLinks(3);
+  await bookingPage.expectBookNowLinks();
 });

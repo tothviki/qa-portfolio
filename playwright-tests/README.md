@@ -4,6 +4,14 @@ Playwright + TypeScript portfolio tests for the public Automation in Testing / S
 
 The suite targets `https://automationintesting.online` by default. Set `AUTOMATION_IN_TESTING_BASE_URL` to run against another deployment.
 
+## Coverage Snapshot
+
+- 36 test cases total
+- 23 API tests, 12 UI tests, 1 E2E test
+- 7 configured projects across API, UI, and E2E browser coverage
+- HTML report: `test-reports/html`
+- JSON results: `test-reports/results.json`
+
 ## Stack
 
 - TypeScript
