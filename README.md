@@ -1,4 +1,4 @@
-# QA Automation Portfolio – Viktória Tóth
+# QA Automation Portfolio - Viktória Tóth
 
 [![CI](https://github.com/tothviki/qa-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tothviki/qa-portfolio/actions/workflows/ci.yml)
 ![Automated Tests](https://img.shields.io/badge/Automated%20Tests-Passing-brightgreen?style=flat&logo=checkmarx&logoColor=white)
@@ -11,22 +11,24 @@ Postman/Newman, Selenium WebDriver, Appium and JMeter.
 This repository contains focused and documented testing projects that show
 practical QA automation skills, maintainable test structure, regression
 thinking and multi-tool testing experience. It is organized as a case study
-with one flagship module and supporting layers beneath it.
+with Playwright as the most complete module, supported by API-focused REST
+Assured and Postman examples, plus additional examples for Selenium, Appium and
+JMeter.
 
 ## Portfolio Snapshot
 
-| Tier | Module | Coverage | Report |
-| --- | --- | --- | --- |
-| Flagship | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
-| Core API | [rest-assured-api-tests](rest-assured-api-tests) | 20 TestNG tests across auth, booking CRUD, and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
-| Core API | [postman-api-tests](postman-api-tests) | 24 checks across focused auth, booking, public API, and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
-| Supporting | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium: 3 mobile web test cases on Android Chrome; JMeter: 2 executable scenarios, 14 total samples | `selenium-web-tests/build/reports/tests/test/index.html`<br>`jmeter-performance-tests/build/reports/tests/test/index.html` |
+| Area                       | Module                                                                                                                                     | Coverage                                                                                                     | Report                                                         |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| Playwright                 | [playwright-tests](playwright-tests)                                                                                                       | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects                                                        | `playwright-tests/test-reports/html`                           |
+| API                        | [rest-assured-api-tests](rest-assured-api-tests)                                                                                           | 21 TestNG tests across auth, booking CRUD, and public API checks                                             | `rest-assured-api-tests/build/reports/tests/test/index.html`   |
+| API                        | [postman-api-tests](postman-api-tests)                                                                                                     | 24 checks across focused auth, booking, public API, and edge-case collections                                | `postman-api-tests/build/reports/postman/*-newman-report.json` |
+| Web / Mobile / Performance | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI test cases; Appium: 3 mobile web test cases; JMeter: 2 executable scenarios, 14 total samples | Module build reports                                           |
 
 ## Portfolio Highlights
 
-- Flagship case study: Playwright + TypeScript API, UI and E2E automation suite
-- Core API case studies: REST Assured and Postman/Newman
-- Supporting modules: Selenium WebDriver, Appium and JMeter
+- Playwright + TypeScript API, UI and E2E automation suite
+- API automation shown through Playwright API, REST Assured and Postman/Newman
+- Supporting examples for Selenium WebDriver, Appium and JMeter
 - Repository-level Gradle tasks for repeatable portfolio validation
 - Module-level commands for focused API, UI, mobile and performance test runs
 
@@ -41,7 +43,7 @@ with one flagship module and supporting layers beneath it.
 
 ## Projects
 
-### Flagship Case Study: Playwright API, UI and E2E Automation
+### Playwright API, UI and E2E Automation
 
 **Playwright + TypeScript**
 
@@ -55,7 +57,7 @@ validation and reporting.
 
 → [playwright-tests](playwright-tests)
 
-### Core API Case Studies
+### API Automation Examples
 
 #### REST Assured API Tests
 
@@ -75,16 +77,14 @@ that are easy to review, run locally and integrate into automated workflows.
 
 → [postman-api-tests](postman-api-tests)
 
-### Supporting Modules
+### Additional Examples
 
 #### Selenium Web Tests
 
 **Selenium WebDriver + Java**
 
 Web UI automation examples demonstrating browser-based testing structure and
-Selenium WebDriver usage. Covers 5 UI test cases across booking availability,
-booking creation entry flow, booking cancel flow, room details navigation and
-contact message submission.
+Selenium WebDriver usage.
 
 → [selenium-web-tests](selenium-web-tests)
 
@@ -93,8 +93,7 @@ contact message submission.
 **Appium + Java**
 
 Mobile web automation examples demonstrating an Appium page-object structure for
-Android Chrome against the public Automation in Testing site. Covers 3 test
-cases: booking search, reservation-page navigation and contact-form validation.
+Android Chrome against the public Automation in Testing site.
 
 → [appium-mobile-tests](appium-mobile-tests)
 
@@ -103,47 +102,49 @@ cases: booking search, reservation-page navigation and contact-form validation.
 **JMeter + Gradle**
 
 Performance testing examples integrated with Gradle for repeatable execution.
-Covers: 2 executable scenarios, 14 total samples across the login and room catalog load tests.
 
 → [jmeter-performance-tests](jmeter-performance-tests)
 
 ## Repository Structure
+
+```text
+qa-portfolio/
+|-- appium-mobile-tests/
+|-- jmeter-performance-tests/
+|-- playwright-tests/
+|-- postman-api-tests/
+|-- rest-assured-api-tests/
+|-- selenium-web-tests/
+|-- build.gradle
+|-- settings.gradle
+`-- README.md
 ```
-    qa-portfolio/
-    ├── appium-mobile-tests/
-    ├── jmeter-performance-tests/
-    ├── playwright-tests/
-    ├── postman-api-tests/
-    ├── rest-assured-api-tests/
-    ├── selenium-web-tests/
-    ├── build.gradle
-    ├── settings.gradle
-    └── README.md
-```
+
 ## Running Tests
 
 Run commands from the repository root.
 
-### Run the default portfolio validation
+### Run all module tests
 
-Runs the reliable portfolio checks, including Java modules, REST Assured API
-tests, Playwright active suite checks and Postman/Newman API tests.
-
-```bash
-./gradlew portfolioTest
-```
-
-The standard Gradle lifecycle is wired to the same portfolio validation:
+The standard Gradle lifecycle remains the default full-project validation and
+runs all module tests wired into each subproject build:
 
 ```bash
 ./gradlew clean build
 ```
 
-Note: the Playwright active suite may include UI/browser tests, which require
-Playwright browser binaries and can increase build runtime. For faster API-only
-or focused runs, use the module-level tasks below.
+### Run the recommended portfolio validation
 
-### Run all wired suites
+Runs the Playwright, REST Assured and Postman modules:
+
+```bash
+./gradlew portfolioTest
+```
+
+### Run all portfolio suites explicitly
+
+Runs the recommended portfolio validation plus the Selenium, Appium and JMeter
+modules:
 
 ```bash
 ./gradlew portfolioFullTest
@@ -163,6 +164,12 @@ Runs REST Assured, Playwright API and Postman/Newman checks:
 ./gradlew javaTest
 ```
 
+### Run additional modules only
+
+```bash
+./gradlew additionalTest
+```
+
 ### Run one module
 
 Use the Gradle project path and task name:
@@ -177,16 +184,6 @@ Use the Gradle project path and task name:
 ./gradlew :jmeter-performance-tests:test
 ```
 
-### Run a subset of modules
-
-Pass multiple tasks in one command:
-
-```bash
-./gradlew :rest-assured-api-tests:test :postman-api-tests:postmanTest
-./gradlew :playwright-tests:playwrightApiTest :postman-api-tests:postmanTest
-./gradlew :selenium-web-tests:test :appium-mobile-tests:test
-```
-
 ### Run REST Assured groups
 
 ```bash
@@ -194,29 +191,22 @@ Pass multiple tasks in one command:
 ./gradlew :rest-assured-api-tests:runRegressionTests
 ```
 
-### Clean generated outputs
+### Playwright local setup
+Playwright browser runs require browser binaries:
 
 ```bash
-./gradlew clean
+cd playwright-tests
+npm install
+npx playwright install
 ```
-
-## What This Portfolio Demonstrates
-
-- Current hands-on QA automation practice with modern Playwright + TypeScript
-- API testing across multiple approaches: Playwright API, REST Assured and Postman/Newman
-- Maintainable test design with fixtures, helpers, page objects and reusable test data
-- Regression-oriented test coverage across API, web, mobile and performance areas
-- Mobile browser automation against a real public site with Appium
-- Practical experience with Gradle-based orchestration across multiple QA modules
-- Ability to document, structure and maintain test automation projects for review
 
 ## Recommended Review Path
 
 If you are reviewing this portfolio quickly, start here:
 
-1. [playwright-tests](playwright-tests) – strongest and most complete module
-2. [rest-assured-api-tests](rest-assured-api-tests) – secondary API case study
-3. [postman-api-tests](postman-api-tests) – secondary API case study
+1. [playwright-tests](playwright-tests) - most complete module
+2. [rest-assured-api-tests](rest-assured-api-tests) - Java API coverage
+3. [postman-api-tests](postman-api-tests) - Postman/Newman API coverage
 
 The remaining modules demonstrate additional tool coverage across Selenium,
 Appium and JMeter.

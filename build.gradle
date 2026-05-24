@@ -103,9 +103,18 @@ configure([
 
 tasks.register('javaTest') {
     group = 'verification'
-    description = 'Runs tests for all Java-based Gradle modules.'
+    description = 'Runs tests for all Java-based Gradle modules, including sample modules.'
 
     dependsOn ':rest-assured-api-tests:test'
+    dependsOn ':selenium-web-tests:test'
+    dependsOn ':appium-mobile-tests:test'
+    dependsOn ':jmeter-performance-tests:test'
+}
+
+tasks.register('additionalTest') {
+    group = 'verification'
+    description = 'Runs the additional Selenium, Appium, and JMeter modules.'
+
     dependsOn ':selenium-web-tests:test'
     dependsOn ':appium-mobile-tests:test'
     dependsOn ':jmeter-performance-tests:test'
@@ -122,33 +131,20 @@ tasks.register('apiTest') {
 
 tasks.register('portfolioTest') {
     group = 'verification'
-    description = 'Runs the reliable portfolio test suites wired into Gradle.'
+    description = 'Runs the recommended portfolio validation: Playwright, REST Assured, and Postman.'
 
-    dependsOn 'javaTest'
+    dependsOn ':rest-assured-api-tests:test'
     dependsOn ':playwright-tests:playwrightTypeCheck'
-    // Run the active Playwright suite by default (includes API and UI projects)
     dependsOn ':playwright-tests:playwrightTest'
     dependsOn ':postman-api-tests:postmanTest'
 }
 
 tasks.register('portfolioFullTest') {
     group = 'verification'
-    description = 'Runs all wired suites, including the full Playwright web suite.'
+    description = 'Runs the recommended validation plus Selenium, Appium, and JMeter modules.'
 
-    dependsOn 'javaTest'
-    dependsOn ':playwright-tests:playwrightTypeCheck'
-    dependsOn ':playwright-tests:playwrightTest'
-    dependsOn ':postman-api-tests:postmanTest'
-}
-
-tasks.named('check') {
-    dependsOn 'javaTest'
-}
-
-// Ensure default `build` runs all modules
-tasks.named('build') {
-    // The root `build` task should depend on each subproject's `build` task
-    dependsOn subprojects.collect { it.path + ':build' }
+    dependsOn 'portfolioTest'
+    dependsOn 'additionalTest'
 }
 
 tasks.register('portfolioClean') {

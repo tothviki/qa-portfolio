@@ -1,7 +1,10 @@
 # Appium Mobile Tests
 
-Gradle module reserved for Appium-based mobile web automation examples against
-the public Automation in Testing site.
+Appium-based mobile web automation examples against the public Automation in
+Testing site.
+
+This module shows mobile-web automation familiarity with Android Chrome. It is
+opt-in because it depends on a live Appium server and emulator or device.
 
 ## Stack
 - Java
@@ -9,7 +12,7 @@ the public Automation in Testing site.
 - JUnit 5
 - Gradle
 
-## Current status
+## Current Status
 This module is wired into the root Gradle build and contains 3 executable Appium tests against the public `automationintesting.online` site in Android Chrome.
 
 The code is organized with page objects so the test classes stay thin and the
@@ -43,6 +46,6 @@ This module is included in:
 
 ```bash
 ./gradlew javaTest
-./gradlew portfolioTest
-./gradlew clean build
+./gradlew additionalTest
+./gradlew portfolioFullTest
 ```

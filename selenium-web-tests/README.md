@@ -27,6 +27,6 @@ This module is included in:
 
 ```bash
 ./gradlew javaTest
-./gradlew portfolioTest
-./gradlew clean build
+./gradlew additionalTest
+./gradlew portfolioFullTest
 ```

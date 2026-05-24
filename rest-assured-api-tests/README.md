@@ -4,8 +4,9 @@ REST Assured API suite for the public Automation in Testing service.
 
 ## Coverage Snapshot
 
-- 20 TestNG tests
+- 21 TestNG tests
 - 6 coverage areas: authentication, booking create, booking read, booking update, booking delete, and public API checks
+- Smoke and regression TestNG groups
 - HTML report: `build/reports/tests/test/index.html`
 - XML results: `build/test-results/test/`
 
@@ -17,24 +18,34 @@ REST Assured API suite for the public Automation in Testing service.
 
 ## Project Scope
 
-This module demonstrates API automation against `https://automationintesting.online` and is structured to show:
+This module demonstrates API automation against
+`https://automationintesting.online` and is structured to show:
 
 - request and response validation with REST Assured
 - authenticated and unauthenticated API flows
 - positive, negative, and edge-case coverage
 - reusable clients, payload factories, and shared setup
 - TestNG grouping for smoke and regression execution
+- Java model classes for typed response mapping
 
 ## Scenario Coverage
 
-| Area | Examples |
-| --- | --- |
-| Authentication | create token, reject invalid credentials |
+| Area           | Examples                                                                       |
+| -------------- | ------------------------------------------------------------------------------ |
+| Authentication | create token, reject invalid credentials                                       |
 | Booking create | valid booking, punctuation, unknown room id, validation errors, malformed JSON |
-| Booking read | fetch by id, list by room id, auth required, missing room filter |
-| Booking update | full update, unsupported patch method |
-| Booking delete | delete existing booking, reject invalid token |
-| Public API | health, rooms, branding, messages |
+| Booking read   | fetch by id, list by room id, auth required, missing room filter               |
+| Booking update | full update, unsupported patch method                                          |
+| Booking delete | delete existing booking, reject invalid token                                  |
+| Public API     | health, rooms, branding, messages                                              |
+
+## Reviewer Path
+Start with these files when reviewing the module:
+1. `src/test/java/com/portfolio/base/BookingApiTestBase.java`
+2. `src/test/java/com/portfolio/clients/BookingClient.java`
+3. `src/test/java/com/portfolio/payloads/AutomationInTestingTestData.java`
+4. `src/test/java/com/portfolio/tests/booking/BookingCreationApiTests.java`
+5. `src/test/java/com/portfolio/tests/booking/BookingReadApiTests.java`
 
 ## Run
 From the repository root:

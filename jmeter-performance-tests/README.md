@@ -1,13 +1,15 @@
 # JMeter Performance Tests
 
-Gradle module for executable JMeter performance testing examples.
+Executable JMeter performance testing examples.
+
+This module demonstrates basic performance-test wiring through Gradle.
 
 ## Stack
 - JMeter
 - Java/Gradle
 - Gradle portfolio runner
 
-## Current status
+## Current Status
 This module is wired into the root Gradle build and now includes executable JMeter-based performance tests:
 - 2 executable scenarios
 - 14 total samples across both scenarios:
@@ -32,6 +34,6 @@ This module is included in:
 
 ```bash
 ./gradlew javaTest
-./gradlew portfolioTest
-./gradlew clean build
+./gradlew additionalTest
+./gradlew portfolioFullTest
 ```

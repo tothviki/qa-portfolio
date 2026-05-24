@@ -21,6 +21,14 @@ Postman/Newman API automation demo for the public Automation in Testing service.
 - Environment-specific execution
 - JSON report output under the module build directory
 
+## Reviewer Path
+Start with these files:
+1. `collections/booking-api-tests.postman_collection.json`
+2. `collections/authentication-api-tests.postman_collection.json`
+3. `collections/public-api-tests.postman_collection.json`
+4. `environments/production.postman_environment.json`
+5. `build.gradle`
+
 ## Run
 From the repository root:
 

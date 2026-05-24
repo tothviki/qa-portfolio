@@ -29,6 +29,14 @@ The suite targets `https://automationintesting.online` by default. Set `AUTOMATI
 | UI    | `src/ui`  | `ui-chrome`, `ui-firefox`, `ui-webkit` | Public booking-page search, room details, reservation entry points, contact form behavior, and browser compatibility checks.       |
 | E2E   | `src/e2e` | `e2e`, `e2e-firefox`, `e2e-webkit`     | Cross-layer checks where API-created booking data changes public room availability.                                                |
 
+## Reviewer Path
+For a fast review, inspect these areas first:
+1. `src/fixtures/automationInTesting.fixture.ts` - shared API fixture and cleanup.
+2. `src/utils/automationInTestingClient.ts` - reusable API client abstraction.
+3. `src/pages/BookingPage.ts` and `src/pages/ContactPage.ts` - page-object structure.
+4. `src/api/bookingCreate.spec.ts`, `src/api/bookingEdgeCases.spec.ts`, and `src/e2e/bookingFlow.spec.ts` - representative API and E2E coverage.
+5. `playwright.config.ts` - project matrix, reporters, retry behavior, and CI settings.
+
 ## Project Layout
 
 ```text
@@ -64,6 +72,12 @@ Purpose tags are additive:
 Generated data is run-scoped with `TEST_RUN_ID` or a timestamp fallback from `AutomationInTestingTestData`. API-created bookings are registered with `automationApi.trackBooking()` and deleted during fixture teardown.
 
 UI booking tests are intentionally read-only for persistent room bookings. They validate availability search, reservation entry points, room details, contact forms, and pre-submit cancellation without completing a public-site booking. Full booking create/update/delete assertions are API-level, with the current E2E journey using API-managed setup to verify that a booked room becomes unavailable in the UI.
+
+## Design Choices
+- API-created bookings are tracked and deleted during fixture teardown to avoid polluting the public demo service.
+- Browser tests avoid final public booking submission and focus on observable UI behavior that can be validated safely.
+- API tests own booking CRUD depth because they are faster, more stable, and easier to clean up than equivalent UI flows.
+- Cross-browser coverage is focused on high-signal UI behaviors instead of duplicating every scenario across every browser.
 
 ## Setup
 
@@ -125,9 +139,9 @@ Repository-level tasks:
 
 ```bash
 ./gradlew apiTest             # REST Assured + Playwright API + Postman
-./gradlew portfolioTest       # Java modules + Playwright typecheck/test + Postman
-./gradlew portfolioFullTest   # all wired portfolio suites
-./gradlew clean build         # standard lifecycle wired through portfolio validation
+./gradlew portfolioTest       # recommended portfolio validation
+./gradlew portfolioFullTest   # recommended validation plus additional modules
+./gradlew clean build         # standard multi-project Gradle lifecycle sanity check
 ```
 
 The active Playwright suite includes browser projects. Install Playwright browser binaries before running it locally or in CI.
