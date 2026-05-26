@@ -6,8 +6,8 @@ The suite targets `https://automationintesting.online` by default. Set `AUTOMATI
 
 ## Coverage Snapshot
 
-- 36 test cases total
-- 23 API tests, 12 UI tests, 1 E2E test
+- 37 test cases total
+- 23 API tests, 12 UI tests, 2 E2E tests
 - 7 configured projects across API, UI, and E2E browser coverage
 - HTML report: `test-reports/html`
 - JSON results: `test-reports/results.json`
@@ -191,6 +191,7 @@ UI specs:
 
 E2E specs:
 
+- `src/e2e/cancellationFlow.spec.ts`
 - `src/e2e/bookingFlow.spec.ts`
 
 ## Implementation Notes

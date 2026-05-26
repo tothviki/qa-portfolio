@@ -19,7 +19,7 @@ plus additional examples for Selenium, Appium and JMeter.
 
 | Area | Module | Coverage | Report |
 | --- | --- | --- | --- |
-| Main automation example | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
+| Main automation example | [playwright-tests](playwright-tests) | 37 test cases: 23 API, 12 UI, 2 E2E across 7 projects | `playwright-tests/test-reports/html` |
 | API automation | [rest-assured-api-tests](rest-assured-api-tests) | 21 TestNG tests across auth, booking CRUD and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
 | API automation | [postman-api-tests](postman-api-tests) | 24 checks across auth, booking, public API and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
 | Supporting examples | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI tests; Appium: 3 mobile web tests; JMeter: 2 executable scenarios, 14 total samples | Module build reports |

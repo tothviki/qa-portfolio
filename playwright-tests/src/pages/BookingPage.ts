@@ -95,8 +95,14 @@ export class BookingPage {
   }
 
   async expectBookedRoomUnavailable(roomId: number): Promise<void> {
-    const bookedRoomLink = this.bookNowLinks.and(this.page.locator(`a[href*="/reservation/${roomId}"]`));
+    const bookedRoomLink = this.roomReservationLink(roomId);
     await expect(bookedRoomLink, 'Booked room should not be shown as reservable').toHaveCount(0);
+  }
+
+  async expectBookedRoomAvailable(roomId: number): Promise<void> {
+    const roomLink = this.roomReservationLink(roomId);
+    await expect(roomLink, 'Cancelled room should be shown as reservable again').toHaveCount(1);
+    await expect(roomLink.first()).toBeVisible();
   }
 
   async expectInvalidDateFeedback(): Promise<void> {
@@ -121,6 +127,10 @@ export class BookingPage {
   get bookNowLinks(): Locator {
     // Room reservation links are the only "Book now" links with reservation URLs; the hero CTA also uses similar text.
     return this.page.locator('a[href^="/reservation/"]').filter({ hasText: /^Book now$/i });
+  }
+
+  private roomReservationLink(roomId: number): Locator {
+    return this.page.locator(`a[href*="/reservation/${roomId}"]`).filter({ hasText: /^Book now$/i });
   }
 
   get reserveNowButton(): Locator {
