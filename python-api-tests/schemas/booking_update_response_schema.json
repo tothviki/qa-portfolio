@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bookingid", "booking"],
+  "properties": {
+    "bookingid": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "booking": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomid",
+        "firstname",
+        "lastname",
+        "depositpaid",
+        "bookingdates",
+        "bookingid"
+      ],
+      "properties": {
+        "roomid": {
+          "type": "integer"
+        },
+        "firstname": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lastname": {
+          "type": "string",
+          "minLength": 1
+        },
+        "depositpaid": {
+          "type": "boolean"
+        },
+        "bookingdates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["checkin", "checkout"],
+          "properties": {
+            "checkin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "checkout": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "bookingid": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}
+

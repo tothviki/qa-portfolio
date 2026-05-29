@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-api-tests"
+version = "0.1.0"
+description = "Python API tests for the Automation in Testing demo service"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+include = ["python_api_tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "smoke: fast high-signal checks",
+    "crud: booking CRUD flow coverage",
+    "negative: negative-path coverage",
+    "validation: payload validation coverage",
+    "contract: schema and contract validation",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "reports"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+strict_equality = true
+ignore_missing_imports = true
+files = ["python_api_tests"]
