@@ -1,3 +1,6 @@
+import com.portfolio.gradle.PythonQualityTask
+import com.portfolio.gradle.PythonTestTask
+
 plugins {
     id 'base'
 }
@@ -8,6 +11,7 @@ tasks.named('clean') {
     delete 'test-reports'
     delete 'test-results'
     delete 'test-results.json'
+    delete 'python-api-tests/reports'
 }
 
 subprojects {
@@ -63,11 +67,43 @@ tasks.register('additionalTest') {
 
 tasks.register('apiTest') {
     group = 'verification'
-    description = 'Runs API test suites across REST Assured, Playwright, and Postman.'
+    description = 'Runs API test suites across REST Assured, Playwright, Postman, and Python.'
 
     dependsOn ':rest-assured-api-tests:test'
     dependsOn ':playwright-tests:playwrightApiTest'
     dependsOn ':postman-api-tests:postmanTest'
+    dependsOn 'pythonTest'
+}
+
+tasks.register('pythonTest', PythonTestTask) {
+    group = 'verification'
+    description = 'Runs the Python API tests with pytest.'
+
+    bootstrapPython = (findProperty('pythonExecutable') ?: 'python3').toString()
+    moduleDirectory = layout.projectDirectory.dir('python-api-tests')
+    sourceFiles.from(fileTree('python-api-tests/python_api_tests') { include '**/*.py' })
+    sourceFiles.from(fileTree('python-api-tests/tests') { include '**/*.py' })
+    sourceFiles.from(fileTree('python-api-tests/schemas') { include '**/*.json' })
+    pyprojectFile = layout.projectDirectory.file('python-api-tests/pyproject.toml')
+    pytestIniFile = layout.projectDirectory.file('python-api-tests/pytest.ini')
+    requirementsFile = layout.projectDirectory.file('python-api-tests/requirements.txt')
+    devRequirementsFile = layout.projectDirectory.file('python-api-tests/requirements-dev.txt')
+    reportFile = layout.projectDirectory.file('python-api-tests/reports/junit.xml')
+}
+
+tasks.register('pythonQuality', PythonQualityTask) {
+    group = 'verification'
+    description = 'Runs Ruff and MyPy checks for the Python API tests.'
+
+    bootstrapPython = (findProperty('pythonExecutable') ?: 'python3').toString()
+    moduleDirectory = layout.projectDirectory.dir('python-api-tests')
+    sourceFiles.from(fileTree('python-api-tests/python_api_tests') { include '**/*.py' })
+    sourceFiles.from(fileTree('python-api-tests/tests') { include '**/*.py' })
+    sourceFiles.from(fileTree('python-api-tests/schemas') { include '**/*.json' })
+    pyprojectFile = layout.projectDirectory.file('python-api-tests/pyproject.toml')
+    pytestIniFile = layout.projectDirectory.file('python-api-tests/pytest.ini')
+    requirementsFile = layout.projectDirectory.file('python-api-tests/requirements.txt')
+    devRequirementsFile = layout.projectDirectory.file('python-api-tests/requirements-dev.txt')
 }
 
 tasks.register('portfolioTest') {
@@ -84,6 +120,7 @@ tasks.named('check') {
     dependsOn ':playwright-tests:playwrightTypeCheck'
     dependsOn ':playwright-tests:playwrightTest'
     dependsOn ':postman-api-tests:postmanTest'
+    dependsOn 'pythonTest'
 }
 
 tasks.register('portfolioFullTest') {

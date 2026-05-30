@@ -25,7 +25,7 @@ public class BookingUpdateApiTests extends BookingApiTestBase {
 
         assertStatus(response, 200);
         BookingUpdateResponse body = response.as(BookingUpdateResponse.class);
-        assertEquals(body.bookingid(), created.bookingid());
+        assertEquals(created.bookingid(), body.bookingid());
         assertBookingMatchesPayload(body.booking(), updatedPayload);
     }
 

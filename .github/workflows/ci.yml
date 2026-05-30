@@ -3,10 +3,10 @@ name: CI
 env:
   JAVA_VERSION: '21'
   NODE_VERSION: '22'
+  PYTHON_VERSION: '3.12'
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -247,6 +247,47 @@ jobs:
         with:
           name: postman-reports
           path: postman-api-tests/build/reports/postman/
+          if-no-files-found: ignore
+
+  python-api-tests:
+    name: Python API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: python-api-tests/requirements.txt
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Run Python API tests
+        run: ./gradlew pythonTest
+
+      - name: Upload Python reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-api-test-reports
+          path: python-api-tests/reports/
           if-no-files-found: ignore
 
   dependency-submission:

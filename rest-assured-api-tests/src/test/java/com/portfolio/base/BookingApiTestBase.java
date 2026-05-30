@@ -36,21 +36,21 @@ public class BookingApiTestBase extends AutomationInTestingBaseTest {
 
     protected void assertBookingMatchesPayload(Booking booking, CreateBookingPayload payload) {
         assertBookingContract(booking);
-        assertEquals(booking.roomid(), payload.roomid());
-        assertEquals(booking.firstname(), payload.firstname());
-        assertEquals(booking.lastname(), payload.lastname());
-        assertEquals(booking.depositpaid(), payload.depositpaid());
-        assertEquals(booking.bookingdates().checkin(), payload.bookingdates().checkin());
-        assertEquals(booking.bookingdates().checkout(), payload.bookingdates().checkout());
+        assertEquals(payload.roomid(), booking.roomid());
+        assertEquals(payload.firstname(), booking.firstname());
+        assertEquals(payload.lastname(), booking.lastname());
+        assertEquals(payload.depositpaid(), booking.depositpaid());
+        assertEquals(payload.bookingdates().checkin(), booking.bookingdates().checkin());
+        assertEquals(payload.bookingdates().checkout(), booking.bookingdates().checkout());
     }
 
     protected void assertBookingMatchesPayload(Booking booking, UpdateBookingPayload payload) {
         assertBookingContract(booking);
-        assertEquals(booking.roomid(), payload.roomid());
-        assertEquals(booking.firstname(), payload.firstname());
-        assertEquals(booking.lastname(), payload.lastname());
-        assertEquals(booking.depositpaid(), payload.depositpaid());
-        assertEquals(booking.bookingdates().checkin(), payload.bookingdates().checkin());
-        assertEquals(booking.bookingdates().checkout(), payload.bookingdates().checkout());
+        assertEquals(payload.roomid(), booking.roomid());
+        assertEquals(payload.firstname(), booking.firstname());
+        assertEquals(payload.lastname(), booking.lastname());
+        assertEquals(payload.depositpaid(), booking.depositpaid());
+        assertEquals(payload.bookingdates().checkin(), booking.bookingdates().checkin());
+        assertEquals(payload.bookingdates().checkout(), booking.bookingdates().checkout());
     }
 }

@@ -19,16 +19,17 @@ plus additional examples for Selenium, Appium and JMeter.
 
 | Area | Module | Coverage | Report |
 | --- | --- | --- | --- |
-| Main automation example | [playwright-tests](playwright-tests) | 36 test cases: 23 API, 12 UI, 1 E2E across 7 projects | `playwright-tests/test-reports/html` |
+| Main automation example | [playwright-tests](playwright-tests) | 37 test cases: 23 API, 12 UI, 2 E2E across 7 projects | `playwright-tests/test-reports/html` |
 | API automation | [rest-assured-api-tests](rest-assured-api-tests) | 21 TestNG tests across auth, booking CRUD and public API checks | `rest-assured-api-tests/build/reports/tests/test/index.html` |
 | API automation | [postman-api-tests](postman-api-tests) | 24 checks across auth, booking, public API and edge-case collections | `postman-api-tests/build/reports/postman/*-newman-report.json` |
+| API automation | [python-api-tests](python-api-tests) | 23 pytest checks across auth, booking CRUD, validation, negative and contract coverage | `python-api-tests/reports/junit.xml` |
 | Supporting examples | [selenium-web-tests](selenium-web-tests), [appium-mobile-tests](appium-mobile-tests), [jmeter-performance-tests](jmeter-performance-tests) | Selenium: 5 UI tests; Appium: 3 mobile web tests; JMeter: 2 executable scenarios, 14 total samples | Module build reports |
 
 ## Portfolio Highlights
 
 - Multi-tool QA portfolio covering API, web, mobile and performance testing
 - Deeper Playwright + TypeScript example covering API, UI and E2E scenarios
-- API automation shown through Playwright API, REST Assured and Postman/Newman
+- API automation shown through Playwright API, REST Assured, Postman/Newman and Python pytest
 - Supporting examples for Selenium WebDriver, Appium and JMeter
 - Repository-level Gradle tasks for repeatable portfolio validation
 - Module-level commands for focused API, UI, mobile and performance test runs
@@ -49,7 +50,7 @@ plus additional examples for Selenium, Appium and JMeter.
 - **Test Automation:** Playwright, REST Assured, Postman/Newman, Selenium WebDriver, Appium
 - **Performance Testing:** JMeter
 - **Build & Execution:** Gradle, npm
-- **Quality & Tooling:** GitHub Actions, TestNG, PyTest, ESLint, Prettier
+- **Quality & Tooling:** GitHub Actions, TestNG, pytest, Ruff, MyPy, ESLint, Prettier
 - **Testing Areas:** API, Web UI, Mobile, E2E, Performance, Regression
 
 ## Projects
@@ -88,6 +89,18 @@ that are easy to review, run locally and integrate into automated workflows.
 
 → [postman-api-tests](postman-api-tests)
 
+#### Python API Tests
+
+**Python + pytest**
+
+Python API suite that mirrors the Playwright API coverage using requests,
+pytest, jsonschema and run-scoped test data.
+
+Current coverage: 23 checks across smoke, CRUD, negative, validation and
+contract-focused API scenarios.
+
+→ [python-api-tests](python-api-tests)
+
 ### Additional Examples
 
 #### Selenium Web Tests
@@ -122,6 +135,7 @@ Performance testing examples integrated with Gradle for repeatable execution.
 qa-portfolio/
 |-- appium-mobile-tests/
 |-- jmeter-performance-tests/
+|-- python-api-tests/
 |-- playwright-tests/
 |-- postman-api-tests/
 |-- rest-assured-api-tests/
@@ -145,7 +159,7 @@ Runs the main portfolio validation: Playwright, REST Assured and Postman/Newman.
 
 ### Full project validation
 
-Runs all module tests wired into each subproject build.
+Runs all module tests wired into each subproject build plus the root-level Playwright, Postman, and Python tests.
 
 ```bash
 ./gradlew clean build
@@ -161,10 +175,26 @@ Runs the recommended portfolio validation plus Selenium, Appium and JMeter.
 
 ### API tests only
 
-Runs REST Assured, Playwright API and Postman/Newman checks.
+Runs REST Assured, Playwright API, Postman/Newman, and Python API checks.
 
 ```bash
 ./gradlew apiTest
+```
+
+### Python API tests only
+
+Runs the standalone Python API suite.
+
+```bash
+./gradlew pythonTest
+```
+
+### Python quality checks
+
+Runs Ruff and MyPy against the Python API module.
+
+```bash
+./gradlew pythonQuality
 ```
 
 ### Java/Gradle modules only
@@ -190,6 +220,7 @@ Use the Gradle project path and task name:
 ./gradlew :playwright-tests:playwrightApiTest
 ./gradlew :playwright-tests:playwrightTypeCheck
 ./gradlew :postman-api-tests:postmanTest
+./gradlew pythonTest
 ./gradlew :selenium-web-tests:test
 ./gradlew :appium-mobile-tests:test
 ./gradlew :jmeter-performance-tests:test
@@ -200,6 +231,21 @@ Use the Gradle project path and task name:
 ```bash
 ./gradlew :rest-assured-api-tests:runSmokeTests
 ./gradlew :rest-assured-api-tests:runRegressionTests
+```
+
+## Python Local Setup
+
+Python-backed root tasks such as `./gradlew pythonTest`, `./gradlew apiTest`, and `./gradlew clean build` create and refresh `python-api-tests/.venv` automatically.
+
+The Python module is packaged as `python_api_tests`, not `src`, to follow normal Python packaging conventions.
+
+If you want to run `pytest` directly from the module directory, set up the virtual environment manually:
+
+```bash
+cd python-api-tests
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Playwright Local Setup
