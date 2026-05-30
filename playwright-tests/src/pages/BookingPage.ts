@@ -70,8 +70,11 @@ export class BookingPage {
   }
 
   async openFirstRoomReservation(): Promise<void> {
-    await expect(this.bookNowLinks.first(), 'First room should have a Book now link').toBeVisible();
-    await this.bookNowLinks.first().click();
+    const firstRoomLink = this.bookNowLinks.first();
+    await expect(firstRoomLink, 'First room should have a Book now link').toBeVisible();
+    const reservationUrl = await firstRoomLink.getAttribute('href');
+    expect(reservationUrl, 'First room reservation link should have an href').toBeTruthy();
+    await this.page.goto(reservationUrl!);
     await this.expectReservationPage();
   }
 

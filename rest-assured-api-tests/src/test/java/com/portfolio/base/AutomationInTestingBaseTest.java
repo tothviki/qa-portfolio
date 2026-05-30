@@ -56,6 +56,6 @@ public class AutomationInTestingBaseTest {
     }
 
     protected void assertStatus(Response response, int expectedStatus) {
-        assertEquals(response.statusCode(), expectedStatus, response.asString());
+        assertEquals(expectedStatus, response.statusCode(), response.asString());
     }
 }

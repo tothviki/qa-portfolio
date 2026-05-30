@@ -26,7 +26,7 @@ public class BookingReadApiTests extends BookingApiTestBase {
         assertStatus(response, 200);
         Booking booking = response.as(Booking.class);
         assertBookingMatchesPayload(booking, payload);
-        assertEquals(booking.bookingid(), created.bookingid());
+        assertEquals(created.bookingid(), booking.bookingid());
     }
 
     @Test(groups = "regression")
