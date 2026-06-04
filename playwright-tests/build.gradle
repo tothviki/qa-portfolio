@@ -2,70 +2,90 @@ plugins {
     id 'base'
 }
 
-def npmExecutable = providers.gradleProperty('npmExecutable').orElse('npm')
-def npxExecutable = providers.gradleProperty('npxExecutable').orElse('npx')
+def resolveExecutable = { String propertyName, String envName, String fallbackName ->
+    def configured = providers.gradleProperty(propertyName)
+            .orElse(providers.environmentVariable(envName))
+            .getOrNull()
+    if (configured) {
+        return configured
+    }
+
+    def candidates = []
+    def nvmBin = System.getenv('NVM_BIN')
+    if (nvmBin) {
+        candidates << "${nvmBin}/${fallbackName}"
+    }
+    candidates << "/opt/homebrew/bin/${fallbackName}"
+    candidates << "/usr/local/bin/${fallbackName}"
+    candidates << fallbackName
+
+    return candidates.find { new File(it).exists() } ?: fallbackName
+}
+
+def npmExecutable = resolveExecutable('npmExecutable', 'NPM_EXECUTABLE', 'npm')
+def npxExecutable = resolveExecutable('npxExecutable', 'NPX_EXECUTABLE', 'npx')
 
 tasks.register('npmInstall', Exec) {
     group = 'build'
     description = 'Installs Playwright project npm dependencies.'
 
-    commandLine npmExecutable.get(), 'install'
+    commandLine npmExecutable, 'install'
 }
 
 tasks.register('playwrightTest', Exec) {
     group = 'verification'
     description = 'Runs the active Playwright test suite.'
 
-    commandLine npmExecutable.get(), 'run', 'test'
+    commandLine npmExecutable, 'run', 'test'
 }
 
 tasks.register('playwrightApiTest', Exec) {
     group = 'verification'
     description = 'Runs Playwright API tests.'
 
-    commandLine npmExecutable.get(), 'run', 'test:api'
+    commandLine npmExecutable, 'run', 'test:api'
 }
 
 tasks.register('playwrightWebTest', Exec) {
     group = 'verification'
     description = 'Reports that Playwright web tests are quarantined.'
 
-    commandLine npmExecutable.get(), 'run', 'test:web'
+    commandLine npmExecutable, 'run', 'test:web'
 }
 
 tasks.register('playwrightUiTest', Exec) {
     group = 'verification'
     description = 'Runs Playwright UI / web tests (tagged with @ui).'
 
-    commandLine npmExecutable.get(), 'run', 'test:web'
+    commandLine npmExecutable, 'run', 'test:web'
 }
 
 tasks.register('playwrightSmokeTest', Exec) {
     group = 'verification'
     description = 'Runs Playwright smoke tests.'
 
-    commandLine npmExecutable.get(), 'run', 'test:smoke'
+    commandLine npmExecutable, 'run', 'test:smoke'
 }
 
 tasks.register('playwrightReport', Exec) {
     group = 'verification'
     description = 'Opens the Playwright HTML report.'
 
-    commandLine npxExecutable.get(), 'playwright', 'show-report'
+    commandLine npxExecutable, 'playwright', 'show-report'
 }
 
 tasks.register('playwrightTypeCheck', Exec) {
     group = 'verification'
     description = 'Runs TypeScript type checking for active Playwright code.'
 
-    commandLine npmExecutable.get(), 'run', 'typecheck'
+    commandLine npmExecutable, 'run', 'typecheck'
 }
 
 tasks.register('playwrightLint', Exec) {
     group = 'verification'
     description = 'Runs ESLint for Playwright TypeScript tests.'
 
-    commandLine npmExecutable.get(), 'run', 'lint'
+    commandLine npmExecutable, 'run', 'lint'
 }
 
 tasks.named('clean') {

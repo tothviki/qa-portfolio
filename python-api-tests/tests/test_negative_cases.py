@@ -5,6 +5,18 @@ from python_api_tests.utils.assertions import assert_json_response
 from python_api_tests.utils.data_factory import DataFactory
 
 
+def _create_booking_for_patch_test(api_client):
+    last_response = None
+    for room_id in (1, 2, 3):
+        response = api_client.create_booking(DataFactory.random_booking(room_id))
+        if response.status_code == 201:
+            return response
+        last_response = response
+
+    assert last_response is not None
+    pytest.fail(f"Could not create booking for PATCH test. Last status: {last_response.status_code}")
+
+
 @pytest.mark.negative
 def test_checkout_before_checkin_returns_conflict(api_client) -> None:
     response = api_client.create_booking(
@@ -56,8 +68,7 @@ def test_get_bookings_requires_room_id_filter(api_client) -> None:
 
 @pytest.mark.negative
 def test_patch_booking_documents_unsupported_method(api_client) -> None:
-    create_response = api_client.create_booking(DataFactory.random_booking())
-    assert create_response.status_code == 201
+    create_response = _create_booking_for_patch_test(api_client)
     created: Booking = create_response.json()
     api_client.track_booking(created["bookingid"])
     auth_token = api_client.authenticate()

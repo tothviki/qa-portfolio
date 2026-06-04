@@ -5,11 +5,26 @@ from python_api_tests.utils.assertions import assert_json_response
 from python_api_tests.utils.data_factory import DataFactory
 
 
+def _create_booking_for_room(api_client, room_id: int):
+    last_response = None
+    for start_day_offset in range(30, 37):
+        booking_data = {
+            **DataFactory.random_booking(room_id),
+            "bookingdates": DataFactory.future_dates(start_day_offset=start_day_offset),
+        }
+        response = api_client.create_booking(booking_data)
+        if response.status_code == 201:
+            return booking_data, response
+        last_response = response
+
+    assert last_response is not None
+    pytest.fail(f"Could not create booking for room {room_id}. Last status: {last_response.status_code}")
+
+
 @pytest.mark.smoke
 @pytest.mark.parametrize("room_id", [1, 2, 3])
 def test_smoke_create_booking_for_supported_room_ids(api_client, room_id: int) -> None:
-    booking_data = DataFactory.random_booking(room_id)
-    response = api_client.create_booking(booking_data)
+    booking_data, response = _create_booking_for_room(api_client, room_id)
 
     assert response.status_code == 201
     assert_json_response(response)

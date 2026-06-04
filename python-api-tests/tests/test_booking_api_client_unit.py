@@ -39,7 +39,10 @@ class FakeSession(requests.Session):
         kwargs["method"] = method
         kwargs["url"] = url
         self.calls.append(kwargs)
-        return self.responses.pop(0)
+        response = self.responses.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        return response
 
 
 def test_client_applies_base_url_default_timeout_and_uppercase_method() -> None:
@@ -76,6 +79,21 @@ def test_authenticate_raises_when_login_fails() -> None:
 
     with pytest.raises(RuntimeError, match="Authentication failed with status 401"):
         client.authenticate()
+
+
+def test_authenticate_retries_once_after_read_timeout() -> None:
+    session = FakeSession(
+        [
+            requests.ReadTimeout("timed out"),
+            _response(200, {"token": "retried-token"}),
+        ]
+    )
+    client = BookingApiClient(settings=_settings(), session=session)
+
+    token = client.authenticate()
+
+    assert token == "retried-token"
+    assert len(session.calls) == 2
 
 
 def test_delete_tracked_bookings_removes_successful_cleanup_ids() -> None:

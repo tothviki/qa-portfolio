@@ -2,7 +2,27 @@ plugins {
     id 'base'
 }
 
-def npmExecutable = providers.gradleProperty('npmExecutable').orElse('npm')
+def resolveExecutable = { String propertyName, String envName, String fallbackName ->
+    def configured = providers.gradleProperty(propertyName)
+            .orElse(providers.environmentVariable(envName))
+            .getOrNull()
+    if (configured) {
+        return configured
+    }
+
+    def candidates = []
+    def nvmBin = System.getenv('NVM_BIN')
+    if (nvmBin) {
+        candidates << "${nvmBin}/${fallbackName}"
+    }
+    candidates << "/opt/homebrew/bin/${fallbackName}"
+    candidates << "/usr/local/bin/${fallbackName}"
+    candidates << fallbackName
+
+    return candidates.find { new File(it).exists() } ?: fallbackName
+}
+
+def npmExecutable = resolveExecutable('npmExecutable', 'NPM_EXECUTABLE', 'npm')
 def postmanEnvironment = providers.gradleProperty('postmanEnvironment').orElse('production')
 def reportDir = layout.buildDirectory.dir('reports/postman')
 
@@ -31,7 +51,7 @@ tasks.register('npmInstall', Exec) {
     group = 'build'
     description = 'Installs the pinned Newman dependency for Postman collections.'
 
-    commandLine npmExecutable.get(), 'ci'
+    commandLine npmExecutable, 'ci'
 }
 
 postmanCollections.each { collection ->
@@ -45,7 +65,7 @@ postmanCollections.each { collection ->
             reportDir.get().asFile.mkdirs()
         }
 
-        commandLine npmExecutable.get(),
+        commandLine npmExecutable,
                 'exec',
                 '--',
                 'newman',
@@ -69,7 +89,7 @@ postmanCollections.each { collection ->
             reportDir.get().asFile.mkdirs()
         }
 
-        commandLine npmExecutable.get(),
+        commandLine npmExecutable,
                 'exec',
                 '--',
                 'newman',
