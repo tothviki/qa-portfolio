@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { futureDate } from '../ui/uiHelpers';
+import { CreateBookingPayload } from '../models/automationInTesting';
 
 export class BookingPage {
   readonly availabilityHeading: Locator;
@@ -39,7 +40,15 @@ export class BookingPage {
     await this.checkinInput.fill(checkin);
     await this.checkoutInput.fill(checkout);
     await expect(this.checkAvailabilityButton, 'Check Availability button should be enabled').toBeEnabled();
+    const availabilityResponse = this.page.waitForResponse(
+      (response) =>
+        response.request().method() === 'GET' &&
+        response.url().includes('/api/room?') &&
+        response.url().includes(`checkin=${checkin}`) &&
+        response.url().includes(`checkout=${checkout}`),
+    );
     await this.checkAvailabilityButton.click();
+    await availabilityResponse;
   }
 
   async expectBookNowLinks(count?: number): Promise<void> {
@@ -78,6 +87,15 @@ export class BookingPage {
     await this.expectReservationPage();
   }
 
+  async openRoomReservation(roomId: number): Promise<void> {
+    const roomLink = this.roomReservationLink(roomId).first();
+    await expect(roomLink, `Room ${roomId} should have a Book now link`).toBeVisible();
+    const reservationUrl = await roomLink.getAttribute('href');
+    expect(reservationUrl, `Room ${roomId} reservation link should have an href`).toBeTruthy();
+    await this.page.goto(reservationUrl!);
+    await this.expectReservationPage();
+  }
+
   async expectReservationPage(): Promise<void> {
     await expect(this.page.getByRole('heading', { name: /Single|Double|Suite/ }).first()).toBeVisible();
     await expect(this.page.getByRole('heading', { name: 'Book This Room' })).toBeVisible();
@@ -97,6 +115,29 @@ export class BookingPage {
     await expect(this.cancelButton).toHaveCount(0);
   }
 
+  async fillGuestDetails(bookingData: CreateBookingPayload): Promise<void> {
+    await this.firstnameInput.fill(bookingData.firstname);
+    await this.lastnameInput.fill(bookingData.lastname);
+    await this.emailInput.fill(bookingData.email);
+    await this.phoneInput.fill(bookingData.phone);
+  }
+
+  async submitReservation(): Promise<void> {
+    await expect(this.activeReservationButton, 'Reservation submit button should be visible').toBeVisible();
+    await this.activeReservationButton.click();
+  }
+
+  async expectBookingConfirmation(checkin: string, checkout: string): Promise<void> {
+    await expect(this.page.getByText('Booking Confirmed')).toBeVisible();
+    await expect(this.page.getByText(`${checkin} - ${checkout}`)).toBeVisible();
+  }
+
+  async expectReservationValidationErrors(messages: string[]): Promise<void> {
+    for (const message of messages) {
+      await expect(this.page.getByText(message, { exact: false }).first()).toBeVisible();
+    }
+  }
+
   async expectBookedRoomUnavailable(roomId: number): Promise<void> {
     const bookedRoomLink = this.roomReservationLink(roomId);
     await expect(bookedRoomLink, 'Booked room should not be shown as reservable').toHaveCount(0);
@@ -106,6 +147,10 @@ export class BookingPage {
     const roomLink = this.roomReservationLink(roomId);
     await expect(roomLink, 'Cancelled room should be shown as reservable again').toHaveCount(1);
     await expect(roomLink.first()).toBeVisible();
+  }
+
+  async hasBookableRoom(roomId: number): Promise<boolean> {
+    return (await this.roomReservationLink(roomId).count()) > 0;
   }
 
   async expectInvalidDateFeedback(): Promise<void> {
@@ -133,7 +178,9 @@ export class BookingPage {
   }
 
   private roomReservationLink(roomId: number): Locator {
-    return this.page.locator(`a[href*="/reservation/${roomId}"]`).filter({ hasText: /^Book now$/i });
+    return this.page
+      .locator(`a[href="/reservation/${roomId}"], a[href^="/reservation/${roomId}?"]`)
+      .filter({ hasText: /^Book now$/i });
   }
 
   get reserveNowButton(): Locator {
@@ -142,5 +189,25 @@ export class BookingPage {
 
   get cancelButton(): Locator {
     return this.page.getByRole('button', { name: 'Cancel' });
+  }
+
+  private get firstnameInput(): Locator {
+    return this.page.getByRole('textbox', { name: 'Firstname' });
+  }
+
+  private get lastnameInput(): Locator {
+    return this.page.getByRole('textbox', { name: 'Lastname' });
+  }
+
+  private get emailInput(): Locator {
+    return this.page.getByRole('textbox', { name: 'Email' });
+  }
+
+  private get phoneInput(): Locator {
+    return this.page.getByRole('textbox', { name: 'Phone' });
+  }
+
+  private get activeReservationButton(): Locator {
+    return this.reserveNowButton.last();
   }
 }

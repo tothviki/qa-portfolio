@@ -1,13 +1,13 @@
 package com.portfolio.base;
 
+import io.appium.java_client.AppiumClientConfig;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.time.Duration;
 
 public abstract class AndroidMobileWebTestBase {
@@ -30,7 +30,7 @@ public abstract class AndroidMobileWebTestBase {
     protected AndroidDriver driver;
 
     @BeforeEach
-    void setUp() throws MalformedURLException {
+    void setUp() {
         Assumptions.assumeTrue(
                 Boolean.parseBoolean(System.getenv().getOrDefault("RUN_APPIUM_TESTS", "false")),
                 "Set RUN_APPIUM_TESTS=true to run Appium tests."
@@ -46,7 +46,10 @@ public abstract class AndroidMobileWebTestBase {
             options.setUdid(ANDROID_UDID);
         }
 
-        driver = new AndroidDriver(new URL(APPIUM_SERVER_URL), options);
+        AppiumClientConfig clientConfig = AppiumClientConfig.defaultConfig()
+                .baseUri(URI.create(APPIUM_SERVER_URL));
+
+        driver = new AndroidDriver(clientConfig, options);
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
     }
 

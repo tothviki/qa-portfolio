@@ -41,10 +41,25 @@ export class ContactPage {
   }
 
   async expectValidationFeedback(): Promise<void> {
-    const validationErrors = this.page.locator('.alert-danger, .invalid-feedback, [role="alert"]').filter({
-      hasText: /must|valid|error|required|between|phone|email/i,
-    });
-    await expect(validationErrors.first(), 'Invalid contact submission should show validation feedback').toBeVisible();
+    const invalidControls = this.page.locator('input:invalid, textarea:invalid');
+    await expect(invalidControls.first(), 'Invalid contact submission should leave at least one form control invalid').toBeVisible();
+
+    const validationMessages = await invalidControls.evaluateAll((elements) =>
+      elements.map((element) => {
+        if (
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement
+        ) {
+          return element.validationMessage.trim();
+        }
+        return '';
+      }),
+    );
+
+    expect(
+      validationMessages.some((message) => message.length > 0),
+      'Invalid contact submission should trigger a native validation message',
+    ).toBe(true);
   }
 
   private get submitButton(): Locator {

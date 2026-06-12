@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import requests
+from requests import ReadTimeout
 
 from python_api_tests.config.settings import Settings, get_settings
 from python_api_tests.models.booking_models import (
@@ -27,6 +28,8 @@ class BookingCleanupResult:
 
 
 class BookingApiClient:
+    AUTH_REQUEST_ATTEMPTS = 2
+
     def __init__(
         self,
         settings: Settings | None = None,
@@ -50,7 +53,16 @@ class BookingApiClient:
             "username": self.settings.username,
             "password": self.settings.password,
         }
-        return self._request("POST", "/api/auth/login", json=payload)
+        last_error: ReadTimeout | None = None
+
+        for _ in range(self.AUTH_REQUEST_ATTEMPTS):
+            try:
+                return self._request("POST", "/api/auth/login", json=payload)
+            except ReadTimeout as exc:
+                last_error = exc
+
+        assert last_error is not None
+        raise last_error
 
     def authenticate(self) -> str:
         if self._auth_token:

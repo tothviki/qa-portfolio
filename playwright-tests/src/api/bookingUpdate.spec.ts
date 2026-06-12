@@ -7,12 +7,11 @@ import { expectMatchesSchema } from '../utils/schemaAssertions';
 
 test.describe('Automation in Testing Booking API - update', () => {
   test('@smoke @api PUT /api/booking/{id} should fully update booking', async ({ automationApi }) => {
+    const initialDates = AutomationInTestingTestData.futureDates(35, 2);
+    const updatedDates = AutomationInTestingTestData.futureDates(42, 3);
     const createResponse = await automationApi.createBooking({
       ...AutomationInTestingTestData.namedBooking('TempFirst', 'TempLast'),
-      bookingdates: {
-        checkin: '2028-01-10',
-        checkout: '2028-01-12',
-      },
+      bookingdates: initialDates,
     });
     expect(createResponse.status()).toBe(201);
     const created = (await createResponse.json()) as Booking;
@@ -20,8 +19,7 @@ test.describe('Automation in Testing Booking API - update', () => {
     const authToken = await automationApi.authenticate();
     const updatedData = {
       ...AutomationInTestingTestData.updatedBooking(created.roomid),
-      bookingid: created.bookingid,
-      bookingdates: created.bookingdates,
+      bookingdates: updatedDates,
     };
 
     const updateResponse = await automationApi.updateBooking(created.bookingid, updatedData, authToken);
@@ -35,6 +33,8 @@ test.describe('Automation in Testing Booking API - update', () => {
     expect(updated.booking.firstname).toBe(updatedData.firstname);
     expect(updated.booking.lastname).toBe(updatedData.lastname);
     expect(updated.booking.depositpaid).toBe(updatedData.depositpaid);
+    expect(updated.booking.bookingdates.checkin).toBe(updatedData.bookingdates.checkin);
+    expect(updated.booking.bookingdates.checkout).toBe(updatedData.bookingdates.checkout);
   });
 
   test('@api PATCH /api/booking/{id} should document unsupported method', async ({ automationApi }) => {

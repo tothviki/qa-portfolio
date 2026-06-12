@@ -6,8 +6,8 @@ The suite targets `https://automationintesting.online` by default. Set `AUTOMATI
 
 ## Coverage Snapshot
 
-- 37 test cases total
-- 23 API tests, 12 UI tests, 2 E2E tests
+- 41 test cases total
+- 23 API tests, 12 UI tests, 6 E2E tests
 - 7 configured projects across API, UI, and E2E browser coverage
 - HTML report: `test-reports/html`
 - JSON results: `test-reports/results.json`
@@ -27,7 +27,7 @@ The suite targets `https://automationintesting.online` by default. Set `AUTOMATI
 | ----- | --------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | API   | `src/api` | `api`                                  | Auth, room discovery, booking create/read/update/delete, booking consistency, edge cases, health, branding, and message contracts. |
 | UI    | `src/ui`  | `ui-chrome`, `ui-firefox`, `ui-webkit` | Public booking-page search, room details, reservation entry points, contact form behavior, and browser compatibility checks.       |
-| E2E   | `src/e2e` | `e2e`, `e2e-firefox`, `e2e-webkit`     | Cross-layer checks where API-created booking data changes public room availability.                                                |
+| E2E   | `src/e2e` | `e2e`, `e2e-firefox`, `e2e-webkit`     | Cross-layer checks for booking availability, public booking submission, booking validation, booking updates, and contact-message propagation. |
 
 ## Reviewer Path
 
@@ -191,8 +191,12 @@ UI specs:
 
 E2E specs:
 
-- `src/e2e/cancellationFlow.spec.ts`
 - `src/e2e/bookingFlow.spec.ts`
+- `src/e2e/bookingReservationFlow.spec.ts`
+- `src/e2e/bookingUpdateAvailabilityFlow.spec.ts`
+- `src/e2e/cancellationFlow.spec.ts`
+- `src/e2e/contactMessagePropagation.spec.ts`
+- `src/e2e/invalidReservationFlow.spec.ts`
 
 ## Implementation Notes
 
